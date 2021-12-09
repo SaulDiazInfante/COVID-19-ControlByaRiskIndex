@@ -89,9 +89,17 @@ fig <- fig %>%
       ),
     showlegend = TRUE,
     name = paste('scene0', cont, sep = '')
+  ) %>%
+  layout(
+    xaxis = list(
+      title = list(text = 'time (days)')
+      ),
+    yaxis = list(
+      title = list(text = 'Prevalence')
+    )
   )
 fig
-
+htmlwidgets::saveWidget(as_widget(fig), "figure.html")
 
 
 
