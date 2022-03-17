@@ -15,6 +15,6 @@ getOdeSolution <- function(rhs = evaluateRhsODE,
   columnames <-
   list('time', 'xS', 'xI', 'xV', 'xR', 'xC', 'xF')
   df <- data.frame(y)
-  names(df)<-columnames
+  names(df) <- columnames
   return(df)
 }

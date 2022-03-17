@@ -9,6 +9,9 @@
     "theta": 0.008333333,
     "sigma": 0.95,
     "gamma": 0.1,
+    "semaphore": "green",
+    "u_k": 100.0,
+    "u_beta": 0.3,
     "initialConditions" : [
         {
             "S_0": 99998.0

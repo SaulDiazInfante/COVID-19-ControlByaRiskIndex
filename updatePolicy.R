@@ -20,6 +20,11 @@ updatePolicy <- function(x, par) {
     "amber" = 50,
     "red" = 10
   )
+  movility_restriction <- c(
+    "green" = 0.0,
+    "amber" = 0.3,
+    "red" = 0.6
+  )
   #traffic signal policy
   ligth = ''
   if (xC <= 0.5) {
@@ -29,7 +34,10 @@ updatePolicy <- function(x, par) {
   } else if (xC > 0.7) {
     ligth <- 'red'
   }
-  k <- as.numeric(capacity[ligth])
-  par$k <- k
+  u_k <- as.numeric(capacity[ligth])
+  u_beta <- beta * (1.0 - as.numeric(movility_restriction[ligth]))
+  par$u_k <- u_k
+  par$u_beta <- u_beta
+  par$semaphore <- ligth
   return(par)
 }

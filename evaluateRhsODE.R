@@ -15,7 +15,10 @@ evaluateRhsODE <- function(t, x, par) {
   xV <- x[3]
   xR <- x[4]
   xC <- x[5]
-  k <- as.numeric(par["k"])
+  #
+  k1 <- as.numeric(par["k1"])
+  k2 <- as.numeric(par["k2"])
+  k <- k1
   a <- as.numeric(par["a"])
   beta <- as.numeric(par["beta"])
   mu <- as.numeric(par["mu"])

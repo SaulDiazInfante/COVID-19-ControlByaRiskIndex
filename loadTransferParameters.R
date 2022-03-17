@@ -9,5 +9,10 @@ loadTransferParameters <- function(file_name = "modelParameters.json") {
   transferParameters <- dataFrameModelParameters %>%
     select(.dots = transferParametersNames)
   colnames(transferParameters) <- transferParametersNames
+  transferParametersNames <-  transferParameters %>%
+    select(!starts_with("costWeights")) %>% names()
+   transferParameters <- dataFrameModelParameters %>%
+    select(.dots = transferParametersNames)
+  colnames(transferParameters) <- transferParametersNames
   return(transferParameters)
 }

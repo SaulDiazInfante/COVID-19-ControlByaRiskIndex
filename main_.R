@@ -7,22 +7,23 @@ library(plotly)
 source("loadInitialConditions.R")
 source("loadTransferParameters.R")
 source("evaluateRhsODE.R")
-source("get_ode_solution.R")
+source("getOdeSolution.R")
 # default parameters in modelParameters.json
-refPar <- 
-    loadTransferParameters(file_name = 'reference_parameters.json')
-par <- 
-    loadTransferParameters(file_name = 'scene01.json')
-initialConditions <- 
-    loadInitialConditions(file_name = 'reference_parameters.json')
+refPar <-
+    loadTransferParameters(file_name = "reference_parameters.json")
+par <-
+    loadTransferParameters(file_name = "scene01.json")
+initialConditions <-
+    loadInitialConditions(file_name = "reference_parameters.json")
 ### Solve system ###
-timeline = seq(0, 1000, 1)
-refSol <- 
-    get_ode_solution(
+timeline <- seq(0, 1092, 1)
+refSol <-
+    getOdeSolution(
         evaluateRhsODE,
         timeline = timeline,
         par = refPar,
-        init = initialConditions)
+        init = initialConditions
+    )
 scenarios <- list(
     "scene01.json",
     "scene02.json",
@@ -30,47 +31,48 @@ scenarios <- list(
     "scene04.json"
 )
 fig <- plot_ly(
-    type = "scatter", 
-    mode = "none")  %>% 
+    type = "scatter",
+    mode = "none"
+) %>%
     add_trace(
         x = timeline,
         y = refSol[, 5],
         mode = "lines",
-        line = 
+        line =
             list(
-                color = 'black',
+                color = "black",
                 dash = "dash"
             ),
         showlegend = TRUE,
-        name = 'without control'
+        name = "without control"
     )
 
 cont <- 1
 for (scene in scenarios) {
     print(scene)
-    init <- 
+    init <-
         loadInitialConditions(file_name = scene)
-    sol <- 
-        get_ode_solution(
+    sol <-
+        getOdeSolution(
             evaluateRhsODE,
             timeline = timeline,
             par = par,
-            init = init)
+            init = init
+        )
     fig <- fig %>%
         add_trace(
-            x = timeline,
+            x = sol[, 1],
             y = sol[, 5],
             mode = "lines",
-            line = 
+            line =
                 list(
-                    #color = 'green',
+                    # color = 'green',
                     dash = "solid"
                 ),
             showlegend = TRUE,
-            name = paste('scene0', cont, sep = '')
+            name = paste("scene0", cont, sep = "")
         )
     cont <- cont + 1
-
 }
 ### Figures ###
 fig

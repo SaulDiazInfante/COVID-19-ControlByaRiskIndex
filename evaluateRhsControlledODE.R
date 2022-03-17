@@ -17,22 +17,17 @@ evaluateRhsODE <- function(t, x, par) {
   xV <- x[3]
   xR <- x[4]
   xC <- x[5]
-  k1 <- as.numeric(par["k1"])
-  k2 <- as.numeric(par["k2"])
+  
+  k <- as.numeric(par["u_k"])
   a <- as.numeric(par["a"])
-  beta <- as.numeric(par["beta"])
+  beta <- as.numeric(par["u_beta"])
   mu <- as.numeric(par["mu"])
   phi <- as.numeric(par["phi"])
   omega <- as.numeric(par["omega"])
   theta <- as.numeric(par["theta"])
   sigma <- as.numeric(par["sigma"])
   gamma <- as.numeric(par["gamma"])
-  ### Set afore ###
-  if (xC <= 0.5) {
-    k <- k1
-  } else {
-    k <- k2
-  }
+  
   ### Infection force and others ###
   nN <- xS + xI + xV + xR
   foi <- (1.0 + a * cos(2 * pi * t / 365.0)) * beta * (xI / nN) * xC

@@ -2,35 +2,51 @@ library(deSolve)
 library(rjson)
 library(reshape2)
 library(dplyr)
+library(tidyquant)
 library(plotly)
+library(classInt)
+library("styler")
+library(lubridate)
 #
 source("loadInitialConditions.R")
 source("loadTransferParameters.R")
-source("evaluateRhsODE.R")
+source("evaluateRhsControlledODE.R")
 source("getOdeSolution.R")
 source("updatePolicy.R")
+source("get_time_stamp_sate_solution.R")
+source("get_time_stamp_policy.R")
+#
 # default parameters in modelParameters.json
-
-refPar <- 
+#
+refPar <-
   loadTransferParameters(file_name = 'reference_parameters.json')
-par <- 
+par <-
   loadTransferParameters(file_name = 'scene01.json')
 initialConditions <- 
   loadInitialConditions(file_name = 'reference_parameters.json')
+#
+#
 ### Solve system ###
-timeLine = seq(0, 1000, 1)
-splitedTimeLine <-
-  split(
-    timeLine,
-    ceiling(seq_along(timeLine)/7)
-  )
-# First iteration
-currentTimeWeek <- unlist(splitedTimeLine[[1]])
+#
+#
+timeLine <- seq(0, 1092, 1)
+grid <- classIntervals(timeLine, 156)
+intervalIndex <- 1
+#
+currentTimeWeek <-
+    seq(from = grid$brks[intervalIndex], to = grid$brks[intervalIndex + 1])
 currentState <- initialConditions
-# TODO:update policy
+#
 par <- updatePolicy(currentState, par)
-
+#
 # Contrafactual solution
+#
+date_policy_idx <- as.integer(0)
+u_beta <- as.numeric(par["beta"])
+u_k <- as.numeric(par["k1"])
+u_semaphore <- par["semaphore"]
+policy_df <- data.frame(date_policy_idx, u_beta, u_k, u_semaphore)
+names(policy_df) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
 refSol <- getOdeSolution(
   evaluateRhsODE,
   timeline = timeLine,
@@ -39,34 +55,75 @@ refSol <- getOdeSolution(
   )
 
 currentSolution <- getOdeSolution(
-  evaluateRhsODE, 
+  evaluateRhsODE,
   timeline = currentTimeWeek,
   par = par,
   init = initialConditions
 )
-#
-for (idx in 2:length(splitedTimeLine)) {
+for (idx in 2:(length(grid$brks) - 1)){
   # Select interval of integration
-  currentTimeWeek <- unlist(splitedTimeLine[[idx]])
+  currentTimeWeek <-
+    seq(from = grid$brks[idx], to = grid$brks[idx + 1])
   # Update parameters (making a decision)
   currentState <- tail(currentSolution[2:7], n = 1)
   par <- updatePolicy(currentState, par)
+  new_action <- data.frame(
+    date_policy_idx = as.integer(date_policy_idx + idx - 1),
+    u_beta = as.numeric(par["u_beta"]),
+    u_k = as.numeric(par["u_k"]),
+    u_semaphore = par$semaphore
+  )
+  policy_df <-bind_rows(policy_df, new_action)
+
   newSolution <- getOdeSolution(
-      evaluateRhsODE, 
+      evaluateRhsODE,
       timeline = currentTimeWeek,
       par = par,
       init = as.numeric(currentState)
   )
   currentSolution <- bind_rows(currentSolution, newSolution)
 }
-cotrolledSolution <- currentSolution
+controlledSolution <- currentSolution
+# timeline stamp tagging
+
+start_date <- ymd(20200101)
+
+# reference solution time stamp tagging
+
+refSolution_state_time_line_idx <- refSol["time"]
+refSolution_state_time_line_date_in_days <- 
+  get_time_stamp_state_solution(
+    start_date=start_date, 
+    refSolution_state_time_line_idx
+  )
+refSol["date"] <- refSolution_state_time_line_date_in_days
+
+#
+#
+controlled_state_time_line_idx <- controlledSolution["time"]
+controlled_state_time_line_date_in_days <- 
+  get_time_stamp_state_solution(
+    start_date=start_date, 
+    controlled_state_time_line_idx
+)
+controlledSolution["date"] <- controlled_state_time_line_date_in_days
+#
+#
+
+policy_time_line_idx <- policy_df["date_policy_idx"]
+policy_time_line_date_in_weeks <- 
+  get_time_stamp_policy(start_date=start_date, policy_time_line_idx)
+policy_df["dates"] <- policy_time_line_date_in_weeks
+
 # plotting
 fig <- plot_ly(
+  refSol,
   type = "scatter", 
-  mode = "none")  %>% 
+  mode = "none"
+)%>% 
   add_trace(
-    x = timeLine,
-    y = refSol[, 5],
+    x = ~date,
+    y = ~xI,
     mode = "lines",
     line = 
       list(
@@ -79,8 +136,9 @@ fig <- plot_ly(
 cont <- 1
 fig <- fig %>%
   add_trace(
-    x = timeLine,
-    y = cotrolledSolution[, 5],
+    data = controlledSolution,
+    x = ~date,
+    y = ~xI,
     mode = "lines",
     line = 
       list(
@@ -89,17 +147,6 @@ fig <- fig %>%
       ),
     showlegend = TRUE,
     name = paste('scene0', cont, sep = '')
-  ) %>%
-  layout(
-    xaxis = list(
-      title = list(text = 'time (days)')
-      ),
-    yaxis = list(
-      title = list(text = 'Prevalence')
-    )
   )
 fig
 htmlwidgets::saveWidget(as_widget(fig), "figure.html")
-
-
-
