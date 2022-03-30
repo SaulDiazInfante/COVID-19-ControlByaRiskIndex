@@ -115,6 +115,7 @@ policy_time_line_idx <- policy_df["date_policy_idx"]
 policy_time_line_date_in_weeks <- 
   get_time_stamp_policy(start_date=start_date, policy_time_line_idx)
 policy_df["dates"] <- policy_time_line_date_in_weeks
+write.csv(policy_df,"light_traffic_policy.csv", row.names = FALSE)
 
 # plotting
 fig <- plot_ly(

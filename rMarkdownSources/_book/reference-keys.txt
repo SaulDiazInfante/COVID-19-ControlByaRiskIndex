@@ -1,0 +1,8 @@
+eq:uncontrolledModel
+eq:forceInfection
+eq:betaControl
+eq:betaControlTrafictLight
+introduction
+literature
+model-forumulation
+numerical-results
