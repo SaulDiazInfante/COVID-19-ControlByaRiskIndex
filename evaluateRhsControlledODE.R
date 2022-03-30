@@ -30,13 +30,13 @@ evaluateRhsODE <- function(t, x, par) {
   
   ### Infection force and others ###
   nN <- xS + xI + xV + xR
-  foi <- (1.0 + a * cos(2 * pi * t / 365.0)) * beta * (xI / nN) * xC
+  foi <- (1.0 + a * cos(2 * pi * t / 365.0)) * beta * (xI / nN) *(1- xC)
   dS <- mu * nN - (foi + phi + mu) * xS + omega * xV + theta * xR
   dI <- foi * xS + (1 - sigma) * foi * xV - (mu + gamma) * xI
   dV <- phi * xS - (mu + omega + (1 - sigma) * foi) * xV
   dR <- gamma * xI - (mu + theta) * xR
-  dC <- (k / (1 - (xI / nN))) *
-    ((1 - xC) / nN) *
+  dC <- (k / (nN - xI )) *
+    ((1 - xC)) *
     (
       foi * xS +
         (1 - sigma) * foi * xV -

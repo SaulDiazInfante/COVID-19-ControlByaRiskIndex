@@ -34,8 +34,8 @@ evaluateRhsODE <- function(t, x, par) {
   dI <- foi * xS + (1 - sigma) * foi * xV - (mu + gamma) * xI
   dV <- phi * xS - (mu + omega + (1 - sigma) * foi) * xV
   dR <- gamma * xI - (mu + theta) * xR
-  dC <- (k / (1 - (xI / nN))) *
-    ((1 - xC) / nN) *
+  dC <- (k / (nN - xI )) * 
+    (1 - xC) *
     (
       foi * xS +
         (1 - sigma) * foi * xV -

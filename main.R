@@ -21,6 +21,7 @@ source("get_time_stamp_policy.R")
 refPar <-
   loadTransferParameters(file_name = 'reference_parameters.json')
 par <-
+  # loadTransferParameters(file_name = 'scene01.json')
   loadTransferParameters(file_name = 'scene01.json')
 initialConditions <- 
   loadInitialConditions(file_name = 'reference_parameters.json')
@@ -50,7 +51,7 @@ names(policy_df) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
 refSol <- getOdeSolution(
   evaluateRhsODE,
   timeline = timeLine,
-  par = par,
+  par = refPar,
   init = initialConditions
   )
 
