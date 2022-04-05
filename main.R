@@ -54,7 +54,7 @@ refSol <- getOdeSolution(
   par = refPar,
   init = initialConditions
   )
-
+#
 currentSolution <- getOdeSolution(
   evaluateRhsODE,
   timeline = currentTimeWeek,
@@ -110,7 +110,6 @@ controlled_state_time_line_date_in_days <-
 controlledSolution["date"] <- controlled_state_time_line_date_in_days
 #
 #
-
 policy_time_line_idx <- policy_df["date_policy_idx"]
 policy_time_line_date_in_weeks <- 
   get_time_stamp_policy(start_date=start_date, policy_time_line_idx)

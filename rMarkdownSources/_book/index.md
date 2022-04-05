@@ -12,12 +12,13 @@ link-citations: yes
 # Abstract {-}
 
   Argument:
-  The number of individual in   gathering could play an important
-  role for control the spread of COVID-19. Thus by controlling the size of
-  this group we can modulate the propagation speed. However, the restrictions 
-  of this kind has to be aligned with a delicate balance between the social and
-  political implications. Thus epidemiologists and government consuls has to
-  deduce a policy accordingly. That is, balance between the cost and profit
+  The number of individual in a gathering could play an important
+  role for control the spread of COVID-19. By controlling the size of
+  meetings, we can mitigate the propagation new infections. However, 
+  this sort of restrictions has to be aligned with a delicate balance 
+  between the social and political implications. Then epidemiologists 
+  and government consuls has to deduce a policy accordingly.
+  That is, balance between the cost and profit
   of limit the size of meetings.
   
 TODO list.

@@ -1,2 +1,19 @@
 # Numerical Results
 Here are the numerical evidence of our argument.
+
+```{r}
+# TODO: put here the plotly figure code with 
+# a load data block
+library(deSolve)
+library(rjson)
+library(reshape2)
+library(dplyr)
+library(tidyquant)
+library(plotly)
+library(classInt)
+library("styler")
+library(lubridate)
+
+#
+```
+
