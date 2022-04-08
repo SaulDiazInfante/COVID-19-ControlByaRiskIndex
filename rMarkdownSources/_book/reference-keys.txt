@@ -5,4 +5,5 @@ eq:betaControlTrafictLight
 introduction
 literature
 model-forumulation
+functional-cost
 numerical-results

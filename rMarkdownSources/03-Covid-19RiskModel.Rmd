@@ -58,6 +58,18 @@ With force infection
 
 \end{equation}
 ```
+Here we describe the risk of acquire the virus in a meeting by
+the state $C(t)$. Note that the ratio $\frac{I}{N}$ denotes the probability
+that a susceptible has a potential contract with a infected individual. 
+Thus $(1 - \frac{I}{N})$ is the contact probability that a infected encounters with
+a suceptible. Thus, in a gather of $k$ individuals,  
+$$
+  C(t):= 1 -\left(1 - \frac{I(t)}{N} \right)^k,
+$$
+describe the probability that a susceptible suffer a contact with a infected in
+a gather of k individuals, in other words, this expression quantify the risk 
+of contagious in meetings of k individuals.
+
 
 To describe epidemic protocols about number the size of a gathering--- the
 number of individuals in a meeting---we describe policies assuming that a
@@ -119,4 +131,22 @@ as
 ```
 
 
+## Functional Cost
+
+Because our aim is to balance the epidemiological protocols with the
+economic implications, we propose a functional cost that penalize the
+implication of the meting restrictions but minimizing the years of 
+life lost accumulated by death or disability due to SARS-CoV-2.
+
+Let $a_{I_S}, a_{I_D}$ weight to quantify the cost due to the number 
+of accumulated confirmed cases and deaths---here we assume that this
+indicator is proportional to the prevalence. Denote by $b_{\beta}$, 
+$b_{k}$ constants to weight the cost due to the restrictions. Then
+our functional reads
+$$
+  J(Y_{I}, u_\beta, u_k): = \int_{0}^T 
+    (a_{I} + a_{D}) Y_{I}(r) + 
+    a_{\beta} u_{\beta}^2(r) + 
+    a_k u_k^2(r) dr.
+$$
 
