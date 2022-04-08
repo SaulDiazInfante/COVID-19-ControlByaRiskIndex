@@ -129,6 +129,37 @@ as
     
 \end{equation}
 ```
+This control function $u_\beta$, encloses non-pharmaceutical measures like
+health-distance, mask-wearing, mobility reduction, among others. Here we assume
+that its implementation reduce transmission rate accordingly to 
+\@ref(eq:betaControl).
+
+Since the aim if this papper is evaluate the effect of restrict the size of 
+gatterings--also aligned with the different risk of levels---
+we postulated the following control to modulate the size of meets.
+
+```{=tex }
+\begin{equation} 
+  u_{k} (C) := 
+    \begin{cases}
+      u_{k} ^ 1, & \text{if } \pi_0 \leq C \leq \pi_i
+        \\
+        \vdots & \vdots
+        \\
+        u_{k} ^ i, & \text{if } \pi_{i-1} \leq C \leq \pi_i
+        \\
+        \vdots & \vdots
+        \\
+        u_{k} ^ n, & \text{if } C \geq \pi_n
+    \end{cases}
+    
+    (\#eq:betaControl)
+    
+\end{equation}
+```
+
+
+
 
 
 ## Functional Cost
@@ -144,7 +175,7 @@ indicator is proportional to the prevalence. Denote by $b_{\beta}$,
 $b_{k}$ constants to weight the cost due to the restrictions. Then
 our functional reads
 $$
-  J(Y_{I_S}, u_\beta, u_k): = \int_{0}^T 
+  J(Y_{I}, u_\beta, u_k): = \int_{0}^T 
     (a_{I} + a_{D}) Y_{I}(r) + 
     a_{\beta} u_{\beta}^2(r) + 
     a_k u_k^2(r) dr.

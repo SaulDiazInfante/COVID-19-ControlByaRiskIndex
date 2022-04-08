@@ -255,6 +255,30 @@ as</p>
     \tag{3.4}
     
 \end{equation}\]</span>
+<p>This control function <span class="math inline">\(u_\beta\)</span>, encloses non-pharmaceutical measures like
+health-distance, mask-wearing, mobility reduction, among others. Here we assume
+that its implementation reduce transmission rate accordingly to
+<a href="model-forumulation.html#eq:betaControl">(3.3)</a>.</p>
+<p>Since the aim if this papper is evaluate the effect of restrict the size of
+gatterings–also aligned with the different risk of levels—
+we postulated the following control to modulate the size of meets.</p>
+<span class="math display" id="eq:betaControl">\[\begin{equation}
+  u_{k} (C) :=
+    \begin{cases}
+      u_{k} ^ 1, &amp; \text{if } \pi_0 \leq C \leq \pi_i
+        \\
+        \vdots &amp; \vdots
+        \\
+        u_{k} ^ i, &amp; \text{if } \pi_{i-1} \leq C \leq \pi_i
+        \\
+        \vdots &amp; \vdots
+        \\
+        u_{k} ^ n, &amp; \text{if } C \geq \pi_n
+    \end{cases}
+    
+    \tag{3.3}
+    
+\end{equation}\]</span>
 <div id="functional-cost" class="section level2 hasAnchor" number="3.1">
 <h2><span class="header-section-number">3.1</span> Functional Cost<a href="model-forumulation.html#functional-cost" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Because our aim is to balance the epidemiological protocols with the
@@ -267,7 +291,7 @@ indicator is proportional to the prevalence. Denote by <span class="math inline"
 <span class="math inline">\(b_{k}\)</span> constants to weight the cost due to the restrictions. Then
 our functional reads
 <span class="math display">\[
-  J(Y_{I_S}, u_\beta, u_k): = \int_{0}^T
+  J(Y_{I}, u_\beta, u_k): = \int_{0}^T
     (a_{I} + a_{D}) Y_{I}(r) +
     a_{\beta} u_{\beta}^2(r) +
     a_k u_k^2(r) dr.
