@@ -2,8 +2,10 @@ eq:uncontrolledModel
 eq:forceInfection
 eq:betaControl
 eq:betaControlTrafictLight
+eq:rTime
 introduction
 literature
 model-forumulation
+formuation-of-the-instant-reproductuve-number-r_t
 functional-cost
 numerical-results

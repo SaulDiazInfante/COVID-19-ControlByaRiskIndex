@@ -19,16 +19,18 @@ get_contrafactual_solution <-
     ref_par = 'reference_parameters.json', rhs = evaluateRhsODE, time_line
   ){
     refPar <-
-      loadTransferParameters(file_name = 'reference_parameters.json')
+      loadTransferParameters(file_name = ref_par)
     initialConditions <- 
-      loadInitialConditions(file_name = 'reference_parameters.json')
+      loadInitialConditions(file_name = ref_par)
+    time_line_per_day <- seq(0, 7 * (length(time_line) - 1))
     refSol <- 
       getOdeSolution(
-        evaluateRhsODE,
-        timeline = time_line,
+        rhs,
+        timeline = time_line_per_day,
         par = refPar,
         init = initialConditions
       )
+    refSol <- data.frame(refSol)
     # reference solution time stamp tagging
     start_date <- ymd(20200101)
     refSolution_state_time_line_idx <- refSol["time"]

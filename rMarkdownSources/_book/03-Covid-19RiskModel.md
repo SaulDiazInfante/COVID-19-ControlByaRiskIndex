@@ -158,8 +158,19 @@ we postulated the following control to modulate the size of meets.
 \end{equation}
 ```
 
-
-
+## Formuation of the instant reproductuve number $R_t$
+  Explanation [ADRIAN].
+  
+```{=tex }
+\begin{equation} 
+  R_t := 
+    \frac{\beta(t) (1 - C(t))}{N}
+    \frac{[S(t) + (1 - \sigma) V(t)]}{(\gamma + \mu)}
+    
+    (\#eq:rTime)
+    
+\end{equation}
+```
 
 
 ## Functional Cost
@@ -175,8 +186,8 @@ indicator is proportional to the prevalence. Denote by $b_{\beta}$,
 $b_{k}$ constants to weight the cost due to the restrictions. Then
 our functional reads
 $$
-  J(Y_{I}, u_\beta, u_k): = \int_{0}^T 
-    (a_{I} + a_{D}) Y_{I}(r) + 
+  J(I, u_\beta, u_k): = \int_{0}^T 
+    (a_{I} + a_{D}) I(r) + 
     a_{\beta} u_{\beta}^2(r) + 
     a_k u_k^2(r) dr.
 $$

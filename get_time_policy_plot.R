@@ -1,32 +1,10 @@
 library(vistime)
 library(dplyr)
 library(data.table)
+library(lubridate)
+source("get_timeline_policy_transitions.R")
 
-get_timeline_policy_plot <- function(timeline_data){
-  #
-  transitions <- timeline_data[1, ]
-  current_policy <- timeline_data[1, "u_semaphore"] 
-  # TODO: Fix time line for start and end dates of each event
-  for (i in 2:nrow(timeline_data)){
-     if (current_policy != timeline_data[i, 4]){
-       record <- timeline_data[i, ]
-       transitions <-bind_rows(transitions, record)
-       current_policy <- timeline_data[i, 4]
-     }
-  }
-  
-  transitions <-bind_rows(transitions, timeline_data[nrow(timeline_data), ])
-  transitions_shift_lag <- shift(transitions[, "dates"], type="lag")
-  transitions_shift_lead <- shift(transitions[, "dates"], type="lead")
-  timeline_events <- transitions[1 : nrow(transitions) - 1, ]
-  timeline_events["start"] <- 
-    transitions_shift_lag[2:length(transitions_shift_lag)]
-  timeline_events["end"] <- 
-    transitions_shift_lead[1:length(transitions_shift_lag)- 1]
-  return(timeline_events)
-}
-timeline_data <- policy_df
-trs = get_timeline_policy_plot(timeline_data=timeline_data)
+trs = get_timeline_policy_transitions()
 timelineData <- 
   data.frame(
     event = trs["u_semaphore"],
@@ -49,6 +27,6 @@ timeline_fig <-
     optimize_y = TRUE, 
     show_labels = TRUE
 )
-htmlwidgets::saveWidget(as_widget(timeline_fig), "timeline_figure.html")
+#htmlwidgets::saveWidget(as_widget(timeline_fig), "timeline_figure.html")
 
 

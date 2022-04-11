@@ -29,8 +29,9 @@ par <-
 initialConditions <- 
   loadInitialConditions(file_name = 'reference_parameters.json')
 
+
 ### Solve system ###
-timeLine <- seq(0, 1092, 1)
+timeLine <- seq(0, 104, 1)
 #
 # Contrafactual solution
 refeSol <- get_contrafactual_solution(time_line = timeLine)
@@ -38,3 +39,5 @@ controlledSol <- get_controlled_solution(time_line = timeLine)
 # plotting
 fig <- plot_scene()
 fig
+
+#TOOD: Fix tagger of the controlled solution

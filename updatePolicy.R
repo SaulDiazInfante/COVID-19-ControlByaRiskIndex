@@ -4,8 +4,7 @@ updatePolicy <- function(x, par) {
   xV <- x[3]
   xR <- x[4]
   xC <- x[5]
-  k1 <- as.numeric(par["k1"])
-  k2 <- as.numeric(par["k2"])
+  k <- as.numeric(par["k"])
   a <- as.numeric(par["a"])
   beta <- as.numeric(par["beta"])
   mu <- as.numeric(par["mu"])
@@ -16,9 +15,9 @@ updatePolicy <- function(x, par) {
   gamma <- as.numeric(par["gamma"])
   # Set capacity with the Mexico###
   capacity <- c(
-    "green" = 200,
-    "amber" = 50,
-    "red" = 10
+    "green" = 0.0,
+    "amber" = 0.5,
+    "red" = 0.9
   )
   movility_restriction <- c(
     "green" = 0.0,
@@ -34,7 +33,7 @@ updatePolicy <- function(x, par) {
   } else if (xC > 0.7) {
     ligth <- 'red'
   }
-  u_k <- as.numeric(capacity[ligth])
+  u_k <- k * (1.0 - as.numeric(capacity[ligth]))
   u_beta <- beta * (1.0 - as.numeric(movility_restriction[ligth]))
   par$u_k <- u_k
   par$u_beta <- u_beta
