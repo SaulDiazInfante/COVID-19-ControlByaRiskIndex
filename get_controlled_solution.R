@@ -7,6 +7,7 @@ library(plotly)
 library(classInt)
 library("styler")
 library(lubridate)
+library(progress)
 #
 source("loadInitialConditions.R")
 source("loadTransferParameters.R")
@@ -25,7 +26,7 @@ get_controlled_solution <-
       loadTransferParameters(file_name = par_file_name)
     initialConditions <- 
       loadInitialConditions(file_name = 'reference_parameters.json')
-    grid <- classIntervals(timeLine, 52)
+    grid <- classIntervals(timeLine, length(time_line) - 1)
     intervalIndex <- 1
     #
     decision_time_scale <- 7
@@ -63,9 +64,13 @@ get_controlled_solution <-
     policy_df <- data.frame(date_policy_idx, u_beta, u_k, u_semaphore[[1]])
     names(policy_df) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
     
-    pb = txtProgressBar(min = 2, max = length(grid$brks) - 1, initial = 1) 
+    pb <- progress_bar$new(
+      format = "computing [:bar] :percent eta: :eta",
+      total = 100, clear = FALSE, width= 60)
+    
     for (idx in 2:(length(grid$brks) - 1)){
       # Select interval of integration
+      pb$tick()
       currentTimeWeek <-
         seq(from = grid$brks[idx] * decision_time_scale,
             to = grid$brks[idx + 1] * decision_time_scale)
@@ -91,7 +96,6 @@ get_controlled_solution <-
           best_current_sol <- candidate_current_sol
           best_par <- par
         }
-        setTxtProgressBar(pb, idx)
       }
       light_actions <- get_semaphore_actions(best_light)
       u_beta <- light_actions$u_beta

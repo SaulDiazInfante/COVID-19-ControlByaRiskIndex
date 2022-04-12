@@ -30,6 +30,23 @@ get_timeline_policy_transitions <-
       transitions_shift_lag[2:length(transitions_shift_lag)]
     timeline_events["end"] <- 
       transitions_shift_lead[1:length(transitions_shift_lag)- 1]
-    # TODO: save transitions to a csv data file
+    timeline_events <- timeline_events %>% 
+      mutate(color = 
+          ifelse(
+            u_semaphore == "green", 
+              "#008450",
+              ifelse(
+                u_semaphore == "yellow",
+                  "#ffd966",
+                  ifelse(
+                    u_semaphore == "red",
+                    "#b81d13",
+                    "---"
+                  )
+              )
+          )
+      )
+    write.csv(timeline_events, "light_traffic_policy_transitions.csv",
+              row.names = FALSE)
     return(timeline_events)
   }

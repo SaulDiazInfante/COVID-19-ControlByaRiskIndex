@@ -18,6 +18,7 @@ source("get_time_stamp_sate_solution.R")
 source("get_time_stamp_policy.R")
 source("get_contrafactual_solution.R")
 source("get_controlled_solution.R")
+source("get_timeline_policy_transitions.R")
 source("plot_scene.R")
 #
 # default parameters in modelParameters.json
@@ -31,11 +32,12 @@ initialConditions <-
 
 
 ### Solve system ###
-timeLine <- seq(0, 104, 1)
+timeLine <- seq(0, 156, 1)
 #
 # Contrafactual solution
 refeSol <- get_contrafactual_solution(time_line = timeLine)
 controlledSol <- get_controlled_solution(time_line = timeLine)
+time_line_events <- get_timeline_policy_transitions()
 # plotting
 fig <- plot_scene()
 fig
