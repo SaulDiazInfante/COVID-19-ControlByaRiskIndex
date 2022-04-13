@@ -11,8 +11,8 @@
     "u_k": 0.0,
     "u_beta": 0.0,
     "a_I":  3.0,
-    "a_beta": 1.0,
-    "a_k":1,
+    "a_beta": 10.0,
+    "a_k":10,
     "semaphore": "green",
     "initialConditions" : [
         {

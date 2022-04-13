@@ -34,12 +34,15 @@ initialConditions <-
 ### Solve system ###
 timeLine <- seq(0, 156, 1)
 #
-# Contrafactual solution
+# Contrafactual and controled solutions
 refeSol <- get_contrafactual_solution(time_line = timeLine)
 controlledSol <- get_controlled_solution(time_line = timeLine)
 time_line_events <- get_timeline_policy_transitions()
+
 # plotting
 fig <- plot_scene()
 fig
 
-#TOOD: Fix tagger of the controlled solution
+# TODO: Implement Risk plot and index
+# TODO: Implement tha phase potrait between Risk C(t ) and R_t
+# Perform animations

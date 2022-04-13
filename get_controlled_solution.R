@@ -17,16 +17,18 @@ source("updatePolicy.R")
 source("get_semaphore_actions.R")
 source("get_time_stamp_sate_solution.R")
 source("get_time_stamp_policy.R")
-#
+source("compute_Rt.R")
 
 get_controlled_solution <- 
-  function(par_file_name = 'scene01.json', rhs = evaluateRhsODE, time_line
+  function(par_file_name = 'scene01.json', 
+           rhs = evaluateRhsODE, 
+           time_line = seq(0, 156, 1)
   ){
     par <-
       loadTransferParameters(file_name = par_file_name)
     initialConditions <- 
       loadInitialConditions(file_name = 'reference_parameters.json')
-    grid <- classIntervals(timeLine, length(time_line) - 1)
+    grid <- classIntervals(time_line, length(time_line) - 1)
     intervalIndex <- 1
     #
     decision_time_scale <- 7
@@ -35,7 +37,7 @@ get_controlled_solution <-
           to = grid$brks[intervalIndex + 1] * decision_time_scale)
     currentState <- initialConditions
     ### TODO:Implement best response control here
-    # First inteval solution
+    # First interval solution
     semaphore_states <- list("green", "yellow", "red")
     best_cost <- 10 ^ 10
     best_light <- "green"
@@ -55,7 +57,7 @@ get_controlled_solution <-
         best_par <- par
       }
     }
-    currentSolution <- best_current_sol
+    currentSolution <- data.frame(best_current_sol)
     u_semaphore <- best_par["semaphore"]
     light_actions <- get_semaphore_actions(u_semaphore[[1]])
     date_policy_idx <- as.integer(1)
@@ -63,14 +65,21 @@ get_controlled_solution <-
     u_k <- light_actions$u_k
     policy_df <- data.frame(date_policy_idx, u_beta, u_k, u_semaphore[[1]])
     names(policy_df) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
-    
-    pb <- progress_bar$new(
-      format = "computing [:bar] :percent eta: :eta",
-      total = 100, clear = FALSE, width= 60)
-    
+    R_t <- 
+      compute_Rt(
+        currentSolution,
+        par,
+        policy_df,
+        TRUE
+      )
+    currentSolution["R_t"] <- R_t
+    #
+    #pb <- progress_bar$new(
+    #  format = "computing [:bar] :percent",
+    #  total = 100, clear = FALSE, width= 60)
     for (idx in 2:(length(grid$brks) - 1)){
       # Select interval of integration
-      pb$tick()
+      #pb$tick()
       currentTimeWeek <-
         seq(from = grid$brks[idx] * decision_time_scale,
             to = grid$brks[idx + 1] * decision_time_scale)
@@ -104,7 +113,15 @@ get_controlled_solution <-
       new_action <- data.frame(date_policy_idx, u_beta, u_k, best_light)
       names(new_action) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
       policy_df <-bind_rows(policy_df, new_action)
-      newSolution <- best_current_sol
+      newSolution <- data.frame(best_current_sol)
+      R_t <- 
+        compute_Rt(
+          newSolution,
+          par,
+          policy_df,
+          TRUE
+        )
+      newSolution["R_t"] <- R_t
       currentSolution <- rbind(head(currentSolution, -1), newSolution)
     }
     controlledSolution_df <- data.frame(currentSolution)

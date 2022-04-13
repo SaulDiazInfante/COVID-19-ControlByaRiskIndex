@@ -7,7 +7,6 @@ library(plotly)
 library(classInt)
 library("styler")
 library(lubridate)
-library(tidyverse)
 source("get_time_policy_plot.R")
 #
 plot_scene <- 
@@ -50,12 +49,48 @@ plot_scene <-
           dash = "solid"
         ),
       showlegend = TRUE,
-      name = fig_file_name
+      name = "Controlled"
     )
 #  
-  fig_2 <- get_time_policy_plot()
+  fig_2 <- plot_ly(
+    refSol,
+    type = "scatter", 
+    mode = "none"
+  )%>% 
+    add_trace(
+      x = ~date,
+      y = ~R_t,
+      mode = "lines",
+      line = 
+        list(
+          color = 'red',
+          dash = "dash"
+        ),
+      showlegend = TRUE,
+      name = 'NC R_t'
+    )
+  fig_2 <- fig_2 %>%
+    add_trace(
+      data = controlledSolution,
+      x = ~date,
+      y = ~R_t,
+      mode = "lines",
+      line = 
+        list(
+          color = 'green',
+          dash = "solid"
+        ),
+      showlegend = TRUE,
+      name = "WC R_t"
+    )
+  #
+  
+  fig_3 <- get_time_policy_plot()
   # subplot
-  fig <- subplot(fig_1, fig_2, nrows = 2, heights = c(0.8,0.2), shareX = TRUE)
+  fig <- subplot(fig_1, fig_2, fig_3, 
+                 nrows = 3,
+                 heights = c(0.7,0.15, 0.15),
+                 shareX = TRUE)
   fig <- 
     fig %>% 
       layout(
