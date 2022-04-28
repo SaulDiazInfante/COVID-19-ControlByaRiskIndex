@@ -24,20 +24,22 @@ plot_scene <-
     refSol,
     type = "scatter", 
     mode = "none"
-  )%>% 
-    add_trace(
-      x = ~date,
-      y = ~xI,
-      mode = "lines",
-      line = 
-        list(
-          color = 'black',
-          dash = "dash"
-        ),
+  ) %>%
+  add_trace(
+    x = ~date,
+    y = ~xI,
+    mode = "lines",
+    line = 
+      list(
+        color = 'black',
+        dash = "dash"
+      ),
       showlegend = TRUE,
       name = 'without control'
-    )
-  fig_1 <- fig_1 %>%
+  )
+#
+  fig_1 <- 
+    fig_1 %>%
     add_trace(
       data = controlledSolution,
       x = ~date,
@@ -56,7 +58,7 @@ plot_scene <-
     refSol,
     type = "scatter", 
     mode = "none"
-  )%>% 
+  ) %>% 
     add_trace(
       x = ~date,
       y = ~R_t,
@@ -69,6 +71,7 @@ plot_scene <-
       showlegend = TRUE,
       name = 'NC R_t'
     )
+#
   fig_2 <- fig_2 %>%
     add_trace(
       data = controlledSolution,
@@ -83,23 +86,58 @@ plot_scene <-
       showlegend = TRUE,
       name = "WC R_t"
     )
-  #
-  
-  fig_3 <- get_time_policy_plot()
-  # subplot
-  fig <- subplot(fig_1, fig_2, fig_3, 
-                 nrows = 3,
-                 heights = c(0.7,0.15, 0.15),
-                 shareX = TRUE)
+#
+  fig_3 <- plot_ly(
+    refSol,
+    type = "scatter", 
+    mode = "none"
+  ) %>% 
+  add_trace(
+    data = refSol,
+    x = ~date,
+    y = ~xC,
+    mode = "lines",
+    line = 
+      list(
+        color = 'blue',
+        dash = "dash"
+      ),
+    showlegend = TRUE,
+    name = "WC Risk"
+  )
+  fig_3 <- fig_3 %>%
+    add_trace(
+      data = controlledSolution,
+      x = ~date,
+      y = ~xC,
+      mode = "lines",
+      line = 
+        list(
+        color = 'blue',
+        dash = "solid"
+      ),
+    showlegend = TRUE,
+    name = "WC R_t"
+  )
+#
+  fig_4 <- get_time_policy_plot()
+# subplot
+  fig <- 
+    subplot(
+    fig_1, fig_2, fig_3, fig_4,
+    nrows = 4,
+    heights = c(0.45, 0.25, 0.25, 0.05),
+    shareX = TRUE
+    #titleY=TRUE,
+    # titleX=FALSE,
+    #margin = 0.1 
+  )
   fig <- 
     fig %>% 
       layout(
-        title = "Contrafactual vs controlled dynamics",
-        xaxis = list(domain=list(x=c(0,1),y=c(0.2, 1))),
-        xaxis2 = list(domain=list(x=c(0, 1),y=c(0.0, 0.2))),
-        showlegend=TRUE,
-        showlegend2=FALSE
+        title = "Contrafactual vs controlled dynamics"
       )
   htmlwidgets::saveWidget(as_widget(fig), "figure.html")
   return(fig)
-  }
+}
+fig <- plot_scene()
