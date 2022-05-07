@@ -1,14 +1,16 @@
-get_semaphore_actions <- function(ligth='green'){
+get_semaphore_actions <- 
+  function(par, ligth){
+  # TODO pull this weight from the json parameters file
   size_restriction <- c(
-    "green" = 0.0,
-    "yellow" = 0.5,
-    "red" = 0.9
+    "green" = par$meeting_size_actions.green,
+    "yellow" = par$meeting_size_actions.yellow,
+    "red" = par$meeting_size_actions.green
   )
   
   movility_restriction <- c(
-    "green" = 0.0,
-    "yellow" = 0.3,
-    "red" = 0.6
+    "green" = par$beta_actions.green,
+    "yellow" = par$beta_actions.yellow,
+    "red" = par$beta_actions.red
   )
   action <- list()
   u_k <- as.numeric(size_restriction[ligth])

@@ -17,20 +17,19 @@ source("compute_Rt.R")
 
 get_contrafactual_solution <-
   function(
-    ref_par = 'reference_parameters.json',
+    par,
+    initialConditions,
     rhs = evaluateRhsODE,
-    time_line = seq(0, 52, 1)
+    time_line = seq(0, 156, 1)
   ){
-    refPar <-
-      loadTransferParameters(file_name = ref_par)
-    initialConditions <- 
-      loadInitialConditions(file_name = ref_par)
     time_line_per_day <- seq(0, 7 * (length(time_line) - 1))
+    ref_par <- par
+    ref_par$control <- 0
     refSol <- 
       getOdeSolution(
         evaluateRhsODE,
         timeline = time_line_per_day,
-        par = refPar,
+        par = ref_par,
         init = initialConditions
       )
     refSol <- data.frame(refSol)
@@ -43,7 +42,7 @@ get_contrafactual_solution <-
         refSolution_state_time_line_idx
       )
     refSol["date"] <- refSolution_state_time_line_date_in_days
-    refSol["R_t"] <- compute_Rt(refSol, refPar)
+    refSol["R_t"] <- compute_Rt(refSol, ref_par)
     refSol_df <- data.frame(refSol)
     write.csv(refSol_df,"reference_solution.csv", row.names = FALSE)
   return(refSol_df)

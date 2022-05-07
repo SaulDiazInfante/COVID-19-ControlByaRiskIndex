@@ -2,7 +2,7 @@ source("evaluateRhsControlledODE.R")
 getOdeSolution <- 
   function(
     rhs = evaluateRhsODE,
-    timeline = seq(0, 365, 1),
+    timeline,
     par, 
     init
   ) {

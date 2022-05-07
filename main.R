@@ -34,9 +34,19 @@ initialConditions <-
 #
 timeLine <- seq(0, 156, 1)
 #
-# Contrafactual and controled solutions
-refeSol <- get_contrafactual_solution(time_line = timeLine)
-controlledSol <- get_controlled_solution(time_line = timeLine)
+# Contrafactual and controlled solutions
+refeSol <- 
+  get_contrafactual_solution(
+    par,
+    initialConditions = initialConditions,
+    time_line = timeLine
+  )
+controlledSol <- 
+  get_controlled_solution(
+    par,
+    initialConditions,
+    time_line = timeLine
+    )
 time_line_events <- get_timeline_policy_transitions()
 #
 # plotting

@@ -47,7 +47,7 @@ plot_scene <-
       mode = "lines",
       line = 
         list(
-          #color = 'green',
+          color = 'black',
           dash = "solid"
         ),
       showlegend = TRUE,
@@ -65,7 +65,7 @@ plot_scene <-
       mode = "lines",
       line = 
         list(
-          color = 'red',
+          color = 'green',
           dash = "dash"
         ),
       showlegend = TRUE,
@@ -103,7 +103,7 @@ plot_scene <-
         dash = "dash"
       ),
     showlegend = TRUE,
-    name = "WC Risk"
+    name = "NC Risk"
   )
   fig_3 <- fig_3 %>%
     add_trace(
@@ -117,7 +117,7 @@ plot_scene <-
         dash = "solid"
       ),
     showlegend = TRUE,
-    name = "WC R_t"
+    name = "WC Risk"
   )
 #
   fig_4 <- get_time_policy_plot()
@@ -140,4 +140,5 @@ plot_scene <-
   htmlwidgets::saveWidget(as_widget(fig), "figure.html")
   return(fig)
 }
-fig <- plot_scene()
+#fig <- plot_scene()
+# fig

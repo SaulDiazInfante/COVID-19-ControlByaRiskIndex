@@ -13,7 +13,30 @@
     "a_I":  3.0,
     "a_beta": 10.0,
     "a_k":10,
+    "control": 0,
     "semaphore": "green",
+    "beta_actions":[
+        { 
+          "green": 0.0
+        },
+        {
+          "yellow": 0.15
+        },
+        { 
+          "red": 0.3
+        }
+    ],
+    "meeting_size_actions":[
+      {
+        "green": 0.00
+      },
+      {
+        "yellow": 0.25
+      },
+      {
+        "red": 0.75
+      }
+    ],
     "initialConditions" : [
         {
             "S_0": 99998.0

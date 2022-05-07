@@ -20,66 +20,64 @@ source("get_time_stamp_policy.R")
 source("compute_Rt.R")
 
 get_controlled_solution <- 
-  function(par_file_name = 'scene01.json', 
+  function(par_, 
+           init,
            rhs = evaluateRhsODE, 
            time_line = seq(0, 156, 1)
   ){
-    par <-
-      loadTransferParameters(file_name = par_file_name)
-    initialConditions <- 
-      loadInitialConditions(file_name = 'reference_parameters.json')
-    grid <- classIntervals(time_line, length(time_line) - 1)
-    intervalIndex <- 1
-    #
-    decision_time_scale <- 7
-    currentTimeWeek <-
-      seq(from = grid$brks[intervalIndex] * decision_time_scale,
+  grid <- classIntervals(time_line, length(time_line) - 1)
+  intervalIndex <- 1
+  #
+  decision_time_scale <- 7
+  currentTimeWeek <-
+    seq(from = grid$brks[intervalIndex] * decision_time_scale,
           to = grid$brks[intervalIndex + 1] * decision_time_scale)
-    currentState <- initialConditions
-    ### TODO:Implement best response control here
-    # First interval solution
-    semaphore_states <- list("green", "yellow", "red")
-    best_cost <- 10 ^ 10
-    best_light <- "green"
-    for (light in semaphore_states){
-      par["semaphore"] <- light
-      candidate_current_sol <- getOdeSolution(
-        evaluateRhsODE,
-        timeline = currentTimeWeek,
-        par = par,
-        init = initialConditions
-      )
-      candidate_cost <- tail(candidate_current_sol[,'xJ'], n=1)
-      if (candidate_cost < best_cost){
-        best_cost <- candidate_cost
-        best_light <- light
-        best_current_sol <- candidate_current_sol
-        best_par <- par
-      }
+  currentState <- initialConditions
+  # First interval solution
+  semaphore_states <- list("green", "yellow", "red")
+  best_cost <- 10 ^ 10
+  best_light <- "green"
+  par <- par_
+  par$control <- 1
+  for (light in semaphore_states){
+    par["semaphore"] <- light
+    candidate_current_sol <- getOdeSolution(
+      evaluateRhsODE,
+      timeline = currentTimeWeek,
+      par = par,
+      init = initialConditions
+    )
+    candidate_cost <- tail(candidate_current_sol[,'xJ'], n=1)
+    if (candidate_cost < best_cost){
+      best_cost <- candidate_cost
+      best_light <- light
+      best_current_sol <- candidate_current_sol
+      best_par <- par
     }
-    currentSolution <- data.frame(best_current_sol)
-    u_semaphore <- best_par["semaphore"]
-    light_actions <- get_semaphore_actions(u_semaphore[[1]])
-    date_policy_idx <- as.integer(1)
-    u_beta <- light_actions$u_beta
-    u_k <- light_actions$u_k
-    policy_df <- data.frame(date_policy_idx, u_beta, u_k, u_semaphore[[1]])
-    names(policy_df) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
-    R_t <- 
-      compute_Rt(
-        currentSolution,
-        par,
-        policy_df,
-        TRUE
-      )
-    currentSolution["R_t"] <- R_t
-    #
-    #pb <- progress_bar$new(
-    #  format = "computing [:bar] :percent",
-    #  total = 100, clear = FALSE, width= 60)
-    for (idx in 2:(length(grid$brks) - 1)){
+  }
+  currentSolution <- data.frame(best_current_sol)
+  u_semaphore <- best_par["semaphore"]
+  light_actions <- get_semaphore_actions(par, u_semaphore[[1]])
+  date_policy_idx <- as.integer(1)
+  u_beta <- light_actions$u_beta
+  u_k <- light_actions$u_k
+  policy_df <- data.frame(date_policy_idx, u_beta, u_k, u_semaphore[[1]])
+  names(policy_df) <- c("date_policy_idx", "u_beta", "u_k", "u_semaphore")
+  R_t <- 
+    compute_Rt(
+      currentSolution,
+      par,
+      policy_df,
+      TRUE
+    )
+  currentSolution["R_t"] <- R_t
+  #
+  pb <- progress_bar$new(
+    format = "computing controlled sol. [:bar] :percent",
+    total = length(grid$brks) - 1, clear = FALSE, width= 60)
+  for (idx in 2:(length(grid$brks) - 1)){
       # Select interval of integration
-      #pb$tick()
+      pb$tick()
       currentTimeWeek <-
         seq(from = grid$brks[idx] * decision_time_scale,
             to = grid$brks[idx + 1] * decision_time_scale)
@@ -106,7 +104,7 @@ get_controlled_solution <-
           best_par <- par
         }
       }
-      light_actions <- get_semaphore_actions(best_light)
+      light_actions <- get_semaphore_actions(par, best_light)
       u_beta <- light_actions$u_beta
       u_k <- light_actions$u_k
       date_policy_idx = as.integer(idx )

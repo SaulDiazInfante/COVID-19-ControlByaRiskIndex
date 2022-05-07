@@ -28,14 +28,24 @@ evaluateRhsODE <- function(t, x, par) {
   theta <- as.numeric(par["theta"])
   sigma <- as.numeric(par["sigma"])
   gamma <- as.numeric(par["gamma"])
+  control <-as.logical( par[["control"]])
+  u_beta <- as.numeric(par["u_beta"])
+  u_k <- as.numeric(par["u_k"])
   a_I <- as.numeric(par["a_I"])
   a_beta <- as.numeric(par["a_beta"])
   a_k <- as.numeric(par["a_k"])
-  light <- par[["semaphore"]]
+  ligth <- par[["semaphore"]]
   ### Update actions according to light state
-  light_actions <- get_semaphore_actions(light)
-  u_beta <- light_actions$u_beta
-  u_k <- light_actions$u_k
+  
+  if (control){
+    light_actions <- 
+      get_semaphore_actions(
+        par, 
+        ligth)  
+    u_beta <- light_actions$u_beta
+    u_k <- light_actions$u_k
+  }
+  
   beta_u <- beta * (1.0 - u_beta)
   k_u <- k * (1.0 - u_k)
   ### Infection force and others ###
@@ -57,3 +67,5 @@ evaluateRhsODE <- function(t, x, par) {
   rhs <- list(c(dS, dI, dV, dR, dC, dF, dJ))
   return(rhs)
 }
+
+#TODO: implement flag to switch the control
