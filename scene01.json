@@ -12,7 +12,8 @@
     "u_beta": 0.0,
     "a_I":  100.0,
     "a_beta": 10.0,
-    "a_k":10,
+    "a_k":10.0,
+    "a_c":100.0,
     "control": 1,
     "semaphore": "green",
     "beta_actions":[

@@ -34,6 +34,7 @@ evaluateRhsODE <- function(t, x, par) {
   a_I <- as.numeric(par["a_I"])
   a_beta <- as.numeric(par["a_beta"])
   a_k <- as.numeric(par["a_k"])
+  a_c <- as.numeric(par[["a_c"]])
   ligth <- par[["semaphore"]]
   ### Update actions according to light state
   
@@ -48,22 +49,23 @@ evaluateRhsODE <- function(t, x, par) {
   
   beta_u <- beta * (1.0 - u_beta)
   k_u <- k * (1.0 - u_k)
+  #
   ### Infection force and others ###
   nN <- xS + xI + xV + xR
-  foi <- (1.0 + a * cos(2 * pi * t / 365.0)) * beta_u * (xI / nN) *(1- xC)
-  dS <- mu * nN - (foi + phi + mu) * xS + omega * xV + theta * xR
-  dI <- foi * xS + (1 - sigma) * foi * xV - (mu + gamma) * xI
-  dV <- phi * xS - (mu + omega + (1 - sigma) * foi) * xV
+  foi <- (1 + a * cos(2 * pi * t / 365)) * beta_u * (1 / nN) * (1 - xC)
+  #
+  dS <- mu * nN + omega * xV + theta * xR - (foi * xI + phi + mu) * xS 
+  dI <- (xS + (1 - sigma) * xV) * foi * xI - (mu + gamma) * xI
+  dV <- phi * xS - (mu + omega + (1 - sigma) * foi * xI) * xV
   dR <- gamma * xI - (mu + theta) * xR
-  dC <- (k_u / (nN - xI )) *
-    ((1 - xC)) *
-    (
-      foi * xS +
-        (1 - sigma) * foi * xV -
-        (mu + gamma) * xI
-    )
-  dF <- foi * xS + (1 - sigma) * foi * xV
-  dJ <- a_I * dF + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
+  dC <- 
+    k_u * (1 - xC) ^ (1 - 1 / k_u) * (
+      1 - ((1 - xC) ^ (1 / k_u))
+  ) * (foi * (xS + (1 - sigma) * xV) - (mu + gamma))
+  dF <- (xS + (1 - sigma) * xV) * foi * xI
+  
+  # dJ <- a_I * dF + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
+  dJ <- a_I * dI + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
   rhs <- list(c(dS, dI, dV, dR, dC, dF, dJ))
   return(rhs)
 }
