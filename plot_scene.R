@@ -9,7 +9,7 @@ library("styler")
 library(lubridate)
 source("get_time_policy_plot.R")
 #
-plot_scene1 <- 
+plot_scene <- 
   function(
     policy_file_name = 'light_traffic_policy.csv',
     controlled_sol_file_name = 'controlled_solution.csv',
