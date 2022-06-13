@@ -61,11 +61,11 @@ evaluateRhsODE <- function(t, x, par) {
   dC <- 
     k_u * (1 - xC) ^ (1 - 1 / k_u) * (
       1 - ((1 - xC) ^ (1 / k_u))
-  ) * (foi * (xS + (1 - sigma) * xV) - (mu + gamma))
+    ) * (foi * (xS + (1 - sigma) * xV) - (mu + gamma))
   dF <- (xS + (1 - sigma) * xV) * foi * xI
   
   # dJ <- a_I * dF + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
-  dJ <- a_I * dI + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
+  dJ <- a_I * xI + a_c * xC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
   rhs <- list(c(dS, dI, dV, dR, dC, dF, dJ))
   return(rhs)
 }
