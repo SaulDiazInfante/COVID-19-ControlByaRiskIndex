@@ -42,7 +42,8 @@ evaluateRhsODE <- function(t, x, par) {
     light_actions <- 
       get_semaphore_actions(
         par, 
-        ligth)  
+        ligth
+      )  
     u_beta <- light_actions$u_beta
     u_k <- light_actions$u_k
   }
@@ -65,7 +66,7 @@ evaluateRhsODE <- function(t, x, par) {
   dF <- (xS + (1 - sigma) * xV) * foi * xI
   
   # dJ <- a_I * dF + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
-  dJ <- a_I * xI + a_c * xC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
+  dJ <- a_I * xI / nN  + a_c * xC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
   rhs <- list(c(dS, dI, dV, dR, dC, dF, dJ))
   return(rhs)
 }

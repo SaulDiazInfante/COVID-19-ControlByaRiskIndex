@@ -4,12 +4,14 @@ get_semaphore_actions <-
   size_restriction <- c(
     "green" = par$meeting_size_actions.green,
     "yellow" = par$meeting_size_actions.yellow,
+    "orange" = par$meeting_size_actions.orange,
     "red" = par$meeting_size_actions.green
   )
   
   movility_restriction <- c(
     "green" = par$beta_actions.green,
     "yellow" = par$beta_actions.yellow,
+    "orange" = par$beta_actions.orange,
     "red" = par$beta_actions.red
   )
   action <- list()

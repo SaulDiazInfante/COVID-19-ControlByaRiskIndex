@@ -23,27 +23,29 @@ get_controlled_solution <-
   function(par_, 
            init,
            rhs = evaluateRhsODE, 
-           time_line = seq(0, 156, 1)
+           time_line = seq(0, 156, 1),
+           decision_period_lenght = 2
   ){
-  grid <- classIntervals(time_line, length(time_line) - 1)
+  n_classes <- (length(time_line) - 1) / decision_period_lenght
+  grid <- classIntervals(time_line, n_classes)
   intervalIndex <- 1
   #
   decision_time_scale <- 7
-  currentTimeWeek <-
+  currentTimePeriod <-
     seq(from = grid$brks[intervalIndex] * decision_time_scale,
           to = grid$brks[intervalIndex + 1] * decision_time_scale)
   currentState <- initialConditions
   # First interval solution
-  semaphore_states <- list("green", "yellow", "red")
+  semaphore_states <- list("green", "yellow", "orange", "red")
   best_cost <- 10 ^ 10
   best_light <- "green"
   par <- par_
-  par$control <- 1
+  par$control <- TRUE
   for (light in semaphore_states){
     par["semaphore"] <- light
     candidate_current_sol <- getOdeSolution(
       evaluateRhsODE,
-      timeline = currentTimeWeek,
+      timeline = currentTimePeriod,
       par = par,
       init = initialConditions
     )
@@ -75,24 +77,24 @@ get_controlled_solution <-
   pb <- progress_bar$new(
     format = "computing controlled sol. [:bar] :percent",
     total = length(grid$brks) - 1, clear = FALSE, width= 60)
-  for (idx in 2:(length(grid$brks) - 1)){
+  for (idx in seq(from=2, to = (length(grid$brks) - 1))){
       # Select interval of integration
       pb$tick()
-      currentTimeWeek <-
+      currentTimePeriod <-
         seq(from = grid$brks[idx] * decision_time_scale,
             to = grid$brks[idx + 1] * decision_time_scale)
       # Update parameters (making a decision)
       currentState <- tail(best_current_sol[, 2:8], n = 1)
       initialConditions <- currentState
       initialConditions[1, 'xJ'] <- 0.0
-      semaphore_states <- list("green", "yellow", "red")
+      semaphore_states <- list("green", "yellow", "orange", "red")
       best_cost <- 10^10
       best_light <- "green"
       for (light in semaphore_states){
         par["semaphore"] <- light
         candidate_current_sol <- getOdeSolution(
           evaluateRhsODE,
-          timeline = currentTimeWeek,
+          timeline = currentTimePeriod,
           par = par,
           init = initialConditions
         )
@@ -120,7 +122,7 @@ get_controlled_solution <-
           TRUE
         )
       newSolution["R_t"] <- R_t
-      currentSolution <- rbind(head(currentSolution, -1), newSolution)
+      currentSolution <- rbind(head(currentSolution, - 1), newSolution)
     }
     controlledSolution_df <- data.frame(currentSolution)
     # timeline stamp tagging
@@ -133,11 +135,14 @@ get_controlled_solution <-
       )
     controlledSolution_df["date"] <- controlled_state_time_line_date_in_days
     #
-    #
+    # TODO: update this function to move length period
     policy_time_line_idx <- policy_df["date_policy_idx"]
-    policy_time_line_date_in_weeks <- 
-      get_time_stamp_policy(start_date=start_date, policy_time_line_idx)
-    policy_df["dates"] <- policy_time_line_date_in_weeks
+    policy_time_line_date_in_periods <- 
+      get_time_stamp_policy(start_date=start_date,
+                            policy_time_line_idx,
+                            decision_period_lenght
+    )
+    policy_df["dates"] <- policy_time_line_date_in_periods
     write.csv(policy_df,"light_traffic_policy.csv", row.names = FALSE)
     write.csv(controlledSolution_df,
               "controlled_solution.csv", row.names = FALSE)
@@ -146,6 +151,7 @@ get_controlled_solution <-
     res$policy <- policy_df
     return(res)
   }
+# TODO: fix time line solutions
 # timeLine <- seq(0, 52, 1)
 # policy_sol <- get_controlled_solution(time_line=timeLine)
 # policy_sol$controlled_solution

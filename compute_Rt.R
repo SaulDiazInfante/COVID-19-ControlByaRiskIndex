@@ -23,7 +23,7 @@ compute_Rt <- function(state_Xt, par, policy_df=NULL, controll_flag=FALSE){
   xV <- state_Xt[, "xV"]
   xC <- state_Xt[, "xC"]
   beta_t <- (1.0 + a * cos(2 * pi / 365.0 * time_)) * beta
-  fact_svc <- (N * (mu + gamma)) ^ (-1) * (1 - xC) * (xS + (1.0 - sigma) - xV) 
+  fact_svc <- (N * (mu + gamma)) ^ (-1) * (1 - xC) * (xS + (1.0 - sigma) * xV) 
   if (controll_flag){
     action <- policy_df[nrow(policy_df), ]
     u_beta <- action["u_beta"]

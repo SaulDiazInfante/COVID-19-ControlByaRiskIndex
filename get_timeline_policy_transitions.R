@@ -10,7 +10,6 @@ get_timeline_policy_transitions <-
   function(policy_file_name = 'light_traffic_policy.csv'){
     #
     policy <- read_csv(policy_file_name)
-    
     first_record <- policy[1, ]
     first_record[1, 5] <- ymd(20200101)
     transitions <-bind_rows(first_record, policy[1, ])
@@ -25,7 +24,6 @@ get_timeline_policy_transitions <-
     }
     last_record <- policy[nrow(policy), ]
     transitions <-bind_rows(transitions, last_record)
-    # last_record <- policy[nrow(policy), ]
     transitions_shift_lag <- shift(transitions[, "dates"], type="lag")[[1]]
     transitions_shift_lead <- shift(transitions[, "dates"], type="lead")[[1]]
     timeline_events <- transitions[1 : nrow(transitions) - 1, ]
@@ -42,9 +40,13 @@ get_timeline_policy_transitions <-
                 u_semaphore == "yellow",
                   "#ffd966",
                   ifelse(
-                    u_semaphore == "red",
-                    "#b81d13",
-                    "---"
+                    u_semaphore == "orange",
+                    "#FF5733",
+                    ifelse(
+                      u_semaphore == "red",
+                      "#b81d13",
+                      "---"
+                    )
                   )
               )
           )

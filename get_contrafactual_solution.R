@@ -24,7 +24,7 @@ get_contrafactual_solution <-
   ){
     time_line_per_day <- seq(0, 7 * (length(time_line) - 1))
     ref_par <- par
-    ref_par$control <- 0
+    ref_par$control <- FALSE
     refSol <- 
       getOdeSolution(
         evaluateRhsODE,

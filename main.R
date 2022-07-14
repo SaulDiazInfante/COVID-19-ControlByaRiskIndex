@@ -26,13 +26,9 @@ source("plot_scene.R")
 #
 par <-
   loadTransferParameters(file_name = 'scene01.json')
-#  loadTransferParameters(file_name = 'scene01.json')
 initialConditions <- 
   loadInitialConditions(file_name = 'reference_parameters.json')
-#
-### Solve system ###
-#
-timeLine <- seq(0, 156, 1)
+timeLine <- seq(0, 78, 1)
 #
 # Contrafactual and controlled solutions
 refeSol <- 
@@ -48,7 +44,6 @@ controlledSol <-
     time_line = timeLine
     )
 time_line_events <- get_timeline_policy_transitions()
-#
 # plotting
 #
 fig <- plot_scene()
