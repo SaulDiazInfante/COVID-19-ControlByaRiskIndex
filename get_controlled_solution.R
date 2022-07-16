@@ -123,36 +123,31 @@ get_controlled_solution <-
         )
       newSolution["R_t"] <- R_t
       currentSolution <- rbind(head(currentSolution, - 1), newSolution)
-    }
-    controlledSolution_df <- data.frame(currentSolution)
-    # timeline stamp tagging
-    start_date <- ymd(20200101)
-    controlled_state_time_line_idx <- controlledSolution_df["time"]
-    controlled_state_time_line_date_in_days <- 
-      get_time_stamp_state_solution(
-        start_date=start_date, 
-        controlled_state_time_line_idx
-      )
-    controlledSolution_df["date"] <- controlled_state_time_line_date_in_days
-    #
-    # TODO: update this function to move length period
-    policy_time_line_idx <- policy_df["date_policy_idx"]
-    policy_time_line_date_in_periods <- 
-      get_time_stamp_policy(start_date=start_date,
-                            policy_time_line_idx,
-                            decision_period_lenght
-    )
-    policy_df["dates"] <- policy_time_line_date_in_periods
-    write.csv(policy_df,"light_traffic_policy.csv", row.names = FALSE)
-    write.csv(controlledSolution_df,
-              "controlled_solution.csv", row.names = FALSE)
-    res <- list()
-    res$controlled_solution <- controlledSolution_df
-    res$policy <- policy_df
-    return(res)
   }
-# TODO: fix time line solutions
-# timeLine <- seq(0, 52, 1)
-# policy_sol <- get_controlled_solution(time_line=timeLine)
-# policy_sol$controlled_solution
-# policy_sol$policy
+  controlledSolution_df <- data.frame(currentSolution)
+  # timeline stamp tagging
+  start_date <- ymd(20200101)
+  controlled_state_time_line_idx <- controlledSolution_df["time"]
+  controlled_state_time_line_date_in_days <- 
+    get_time_stamp_state_solution(
+      start_date=start_date, 
+      controlled_state_time_line_idx
+    )
+  controlledSolution_df["date"] <- controlled_state_time_line_date_in_days
+  #
+  # TODO: update this function to move length period
+  policy_time_line_idx <- policy_df["date_policy_idx"]
+  policy_time_line_date_in_periods <- 
+    get_time_stamp_policy(start_date=start_date,
+                          policy_time_line_idx,
+                          decision_period_lenght
+  )
+  policy_df["dates"] <- policy_time_line_date_in_periods
+  write.csv(policy_df,"light_traffic_policy.csv", row.names = FALSE)
+  write.csv(controlledSolution_df,
+            "controlled_solution.csv", row.names = FALSE)
+  res <- list()
+  res$controlled_solution <- controlledSolution_df
+  res$policy <- policy_df
+  return(res)
+}

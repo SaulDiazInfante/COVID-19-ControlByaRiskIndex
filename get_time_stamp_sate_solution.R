@@ -4,7 +4,7 @@ get_time_stamp_state_solution <-
   delta_time <- days(1)
   new_date <- start_date + delta_time
   new_week_date <- week(start_date + delta_time)
-  line_time_stamps <- data.frame(new_date) 
+  line_time_stamps <- data.frame(start_date) 
   names(line_time_stamps) <- c("date")
   for (idx in time_line[2:nrow(time_line) , 1]){
     delta_time <- days(as.integer(idx + 0.5))

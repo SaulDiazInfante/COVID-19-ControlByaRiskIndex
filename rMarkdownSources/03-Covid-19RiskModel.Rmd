@@ -74,14 +74,17 @@ of contagious in meetings of k individuals.
 To describe epidemic protocols about number the size of a gathering--- the
 number of individuals in a meeting---we describe policies assuming that a
 decision maker choose an strategy each week from a finite and countable set of
-actions. Thus letting a partition of one according to the risk we define the
+actions. Thus letting a partition of one according to the risk and the
+actual state of the dynamical system we define the ligth traffic
 closed loop policy
+$L_C(x, R_t)$ to fix an initial semaphore color. Then according to this
+light color $L_C(x)$ we define the following actions
 
 ```{=tex }
 \begin{equation} 
-    u_{\beta} = u_{\beta} (C) := 
+    u_{\beta} = u_{\beta} (L_C(x)) := 
     \begin{cases}
-      u_{\beta} ^ 1, & \text{if } \pi_0 \leq C \leq \pi_i
+      u_{\beta} ^ {green}^, & \text{if } \pi_0 \leq C \leq \pi_i
         \\
         \vdots & \vdots
         \\

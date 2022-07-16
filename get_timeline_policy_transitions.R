@@ -7,14 +7,19 @@ library(tidyquant)
 
 
 get_timeline_policy_transitions <- 
-  function(policy_file_name = 'light_traffic_policy.csv'){
+  function(policy_file_name = 'light_traffic_policy.csv',
+           solution_file = "controlled_solution.csv"){
     #
     policy <- read_csv(policy_file_name)
+    controlledSol <- read_csv(solution_file)
+    solution_time_line <- controlledSol["date"]
+    solution_last_time <- solution_time_line$date[nrow(solution_time_line)]
     first_record <- policy[1, ]
-    first_record[1, 5] <- ymd(20200101)
-    transitions <-bind_rows(first_record, policy[1, ])
+    
+    # first_record[1, 5] <- ymd(20200101)
+    # transitions <-bind_rows(first_record, policy[1, ])
+    transitions <- first_record
     current_policy <- policy[1,'u_semaphore']
-    # TODO: Fix time line for start and end dates of each event
     for (i in 2:nrow(policy)){
       if (current_policy != policy[i, 4]){
         record <- policy[i, ]
@@ -31,6 +36,9 @@ get_timeline_policy_transitions <-
       transitions_shift_lag[2:length(transitions_shift_lag)]
     timeline_events["end"] <- 
       transitions_shift_lead[1:length(transitions_shift_lag)- 1]
+    if (last_record$dates != solution_last_time){
+      timeline_events$end[nrow(timeline_events)] <- solution_last_time
+    }
     timeline_events <- timeline_events %>% 
       mutate(color = 
           ifelse(

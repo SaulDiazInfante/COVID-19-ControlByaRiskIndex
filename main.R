@@ -28,7 +28,7 @@ par <-
   loadTransferParameters(file_name = 'scene01.json')
 initialConditions <- 
   loadInitialConditions(file_name = 'reference_parameters.json')
-timeLine <- seq(0, 78, 1)
+timeLine <- seq(0, 156, 1)
 #
 # Contrafactual and controlled solutions
 refeSol <- 
