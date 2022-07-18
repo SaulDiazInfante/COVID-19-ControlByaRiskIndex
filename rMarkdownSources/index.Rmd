@@ -19,6 +19,7 @@ link-citations: yes
   between the social and political implications. Then epidemiologists 
   and government consuls has to deduce a policy accordingly.
   That is, balance between the cost and profit
-  of limit the size of meetings.
+  of limit the size of meetings and restrictions that affect the 
+  mobility, mask wearing and others NPIs .
   
 TODO list.

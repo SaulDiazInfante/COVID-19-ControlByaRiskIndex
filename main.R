@@ -49,6 +49,6 @@ time_line_events <- get_timeline_policy_transitions()
 fig <- plot_scene()
 fig
 #
-# TODO: Implement Risk plot and index
+# TODO: Prepare the package directory tree and rebuild accordingly
 # TODO: Implement the phase portrait between Risk C(t) and R_t
 # Perform animations

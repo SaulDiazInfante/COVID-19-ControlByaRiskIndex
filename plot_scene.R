@@ -175,7 +175,7 @@ plot_scene <-
       add_trace(
         data = controlledSolution,
         x = ~date,
-        y = ~xJ,
+        y = ~cumsum(xJ),
         mode = "lines",
         line = 
           list(
@@ -206,5 +206,5 @@ plot_scene <-
     htmlwidgets::saveWidget(as_widget(fig), "figure.html")
     return(fig)
   }
-#fig <- plot_scene()
+fig <- plot_scene()
 # fig
