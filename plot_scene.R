@@ -206,5 +206,5 @@ plot_scene <-
     htmlwidgets::saveWidget(as_widget(fig), "figure.html")
     return(fig)
   }
-fig <- plot_scene()
+# fig <- plot_scene()
 # fig

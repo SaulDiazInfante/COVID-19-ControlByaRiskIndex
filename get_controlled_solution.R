@@ -24,7 +24,7 @@ get_controlled_solution <-
            init,
            rhs = evaluateRhsODE, 
            time_line = seq(0, 156, 1),
-           decision_period_lenght = 2
+           decision_period_lenght = 1
   ){
   n_classes <- (length(time_line) - 1) / decision_period_lenght
   grid <- classIntervals(time_line, n_classes)

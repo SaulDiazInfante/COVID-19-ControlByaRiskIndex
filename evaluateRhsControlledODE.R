@@ -55,8 +55,9 @@ evaluateRhsODE <- function(t, x, par) {
   nN <- xS + xI + xV + xR
   foi <- (1 + a * cos(2 * pi * t / 365)) * beta_u * (1 / nN) * (1 - xC)
   #
+  
   dS <- mu * nN + omega * xV + theta * xR - (foi * xI + phi + mu) * xS 
-  dI <- (xS + (1 - sigma) * xV) * foi * xI - (mu + gamma) * xI
+  dI <- (xS + (1 - sigma) * xV) * foi * xI- (mu + gamma) * xI
   dV <- phi * xS - (mu + omega + (1 - sigma) * foi * xI) * xV
   dR <- gamma * xI - (mu + theta) * xR
   dC <- 
@@ -66,7 +67,7 @@ evaluateRhsODE <- function(t, x, par) {
   dF <- (xS + (1 - sigma) * xV) * foi * xI
   
   # dJ <- a_I * dF + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
-  dJ <- a_I * xI / nN  + a_c * xC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
+  dJ <- a_I * xI + a_c * xC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
   rhs <- list(c(dS, dI, dV, dR, dC, dF, dJ))
   return(rhs)
 }

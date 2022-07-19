@@ -10,24 +10,24 @@
     "gamma": 0.1,
     "u_k": 0.0,
     "u_beta": 0.0,
-    "a_I":  10000.0,
-    "a_beta": 100.0,
-    "a_k":100.0,
-    "a_c":10000.0,
-    "control": false,
-    "semaphore": "orange",
+    "a_I":    0.0001,
+    "a_beta": 0.05,
+    "a_k":    0.001,
+    "a_c":    0.001,
+    "control": 1,
+    "semaphore": "green",
     "beta_actions":[
         { 
           "green": 0.0
         },
         {
-          "yellow": 0.15
+          "yellow": 0.1
         },
         {
-          "orange": 0.22
+          "orange": 0.2
         },
         { 
-          "red": 0.25
+          "red": 0.3
         }
     ],
     "meeting_size_actions":[
@@ -35,13 +35,13 @@
         "green": 0.00
       },
       {
-        "yellow": 0.35
+        "yellow": 0.25
       },
       {
-        "orange":0.47 
+        "orange": 0.5
       },
       {
-        "red": 0.5
+        "red": 0.75
       }
     ],
     "initialConditions" : [
@@ -58,7 +58,7 @@
             "R_0": 0.0
         },
         {
-            "C_0": 0.3299484
+            "C_0": 0.0003299484
         }, 
         {
             "F_0": 0.0

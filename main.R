@@ -27,7 +27,8 @@ source("plot_scene.R")
 par <-
   loadTransferParameters(file_name = 'scene01.json')
 initialConditions <- 
-  loadInitialConditions(file_name = 'reference_parameters.json')
+  loadInitialConditions(file_name = 'scene01.json')
+  #loadInitialConditions(file_name = 'reference_parameters.json')
 timeLine <- seq(0, 156, 1)
 #
 # Contrafactual and controlled solutions
@@ -41,7 +42,8 @@ controlledSol <-
   get_controlled_solution(
     par,
     initialConditions,
-    time_line = timeLine
+    time_line = timeLine,
+    decision_period_lenght = 1
     )
 time_line_events <- get_timeline_policy_transitions()
 # plotting
