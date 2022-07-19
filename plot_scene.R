@@ -175,7 +175,7 @@ plot_scene <-
       add_trace(
         data = controlledSolution,
         x = ~date,
-        y = ~cumsum(xJ),
+        y = ~xJ,
         mode = "lines",
         line = 
           list(

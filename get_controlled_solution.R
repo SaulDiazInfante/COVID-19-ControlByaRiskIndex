@@ -86,7 +86,7 @@ get_controlled_solution <-
       # Update parameters (making a decision)
       currentState <- tail(best_current_sol[, 2:8], n = 1)
       initialConditions <- currentState
-      initialConditions[1, 'xJ'] <- 0.0
+      # initialConditions[1, 'xJ'] <- 0.0
       semaphore_states <- list("green", "yellow", "orange", "red")
       best_cost <- 10^10
       best_light <- "green"
