@@ -9,6 +9,10 @@ library("styler")
 library(lubridate)
 source("get_time_policy_plot.R")
 #
+#
+Sys.setenv("plotly_username"="sauld")
+Sys.setenv("plotly_api_key"="v7PCLDO6qCOF66LfWsQ6")
+
 plot_scene <- 
   function(
     policy_file_name = 'light_traffic_policy.csv',
@@ -204,7 +208,14 @@ plot_scene <-
         title = "Contrafactual vs controlled dynamics"
       )
     htmlwidgets::saveWidget(as_widget(fig), "figure.html")
+    
+    if (!require("processx")) 
+      install.packages("processx")
+    # orca(fig, "figure_01.png")
+    save_image(fig, "figure_01.png", width = 1417, height = 875.7726)
     return(fig)
   }
-# fig <- plot_scene()
-# fig
+fig <- plot_scene()
+api_create(fig, filename = "r-plotly-figure-01-tlp-cvd19")
+# paried
+# ["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"]
