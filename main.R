@@ -25,29 +25,29 @@ source("plot_scene.R")
 #
 #
 par <-
-  loadTransferParameters(file_name = 'scene01.json')
-initialConditions <- 
-  loadInitialConditions(file_name = 'scene01.json')
+  loadTransferParameters(file_name = "scene01.json")
+initialConditions <-
+  loadInitialConditions(file_name = "scene01.json")
 timeLine <- seq(0, 156, 1)
 #
 # Contrafactual and controlled solutions
-refeSol <- 
+refeSol <-
   get_contrafactual_solution(
     par,
     initialConditions = initialConditions,
     time_line = timeLine
   )
-controlledSol <- 
+controlledSol <-
   get_controlled_solution(
     par,
     initialConditions,
     time_line = timeLine,
     decision_period_lenght = 2
-    )
+  )
 time_line_events <- get_timeline_policy_transitions()
 # plotting
 #
-fig <- plot_scene()
+fig <- plot_scene_01()
 fig
 #
 # TODO: Prepare the package directory tree and rebuild accordingly

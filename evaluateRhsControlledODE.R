@@ -1,11 +1,11 @@
 source("get_semaphore_actions.R")
-#' Evaluates the right hand side of the 
+#' Evaluates the right hand side of the
 #' controlled ode y'=f(t, x, u) with control
 #' time u = u(x(t))
 #'
-#' @param t 
-#' @param x 
-#' @param par 
+#' @param t
+#' @param x
+#' @param par
 #'
 #' @return rhs
 #' @export
@@ -28,7 +28,7 @@ evaluateRhsODE <- function(t, x, par) {
   theta <- as.numeric(par["theta"])
   sigma <- as.numeric(par["sigma"])
   gamma <- as.numeric(par["gamma"])
-  control <-as.logical( par[["control"]])
+  control <- as.logical(par[["control"]])
   u_beta <- as.numeric(par["u_beta"])
   u_k <- as.numeric(par["u_k"])
   a_I <- as.numeric(par["a_I"])
@@ -37,17 +37,17 @@ evaluateRhsODE <- function(t, x, par) {
   a_c <- as.numeric(par[["a_c"]])
   ligth <- par[["semaphore"]]
   ### Update actions according to light state
-  
-  if (control){
-    light_actions <- 
+
+  if (control) {
+    light_actions <-
       get_semaphore_actions(
-        par, 
+        par,
         ligth
-      )  
+      )
     u_beta <- light_actions$u_beta
     u_k <- light_actions$u_k
   }
-  
+
   beta_u <- beta * (1.0 - u_beta)
   k_u <- k * (1.0 - u_k)
   #
@@ -55,21 +55,21 @@ evaluateRhsODE <- function(t, x, par) {
   nN <- xS + xI + xV + xR
   foi <- (1 + a * cos(2 * pi * t / 365)) * beta_u * (1 / nN) * (1 - xC)
   #
-  
-  dS <- mu * nN + omega * xV + theta * xR - (foi * xI + phi + mu) * xS 
-  dI <- (xS + (1 - sigma) * xV) * foi * xI- (mu + gamma) * xI
+
+  dS <- mu * nN + omega * xV + theta * xR - (foi * xI + phi + mu) * xS
+  dI <- (xS + (1 - sigma) * xV) * foi * xI - (mu + gamma) * xI
   dV <- phi * xS - (mu + omega + (1 - sigma) * foi * xI) * xV
   dR <- gamma * xI - (mu + theta) * xR
-  dC <- 
-    k_u * (1 - xC) ^ (1 - 1 / k_u) * (
-      1 - ((1 - xC) ^ (1 / k_u))
+  dC <-
+    k_u * (1 - xC)^(1 - 1 / k_u) * (
+      1 - ((1 - xC)^(1 / k_u))
     ) * (foi * (xS + (1 - sigma) * xV) - (mu + gamma))
   dF <- (xS + (1 - sigma) * xV) * foi * xI
-  
+
   # dJ <- a_I * dF + a_c * dC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
-  dJ <- a_I * xI + a_c * xC + a_beta * u_beta ^ 2 + a_k * u_k ^ 2
+  dJ <- a_I * xI + a_c * xC + a_beta * u_beta^2 + a_k * u_k^2
   rhs <- list(c(dS, dI, dV, dR, dC, dF, dJ))
   return(rhs)
 }
 
-#TODO: implement flag to switch the control
+# TODO: implement flag to switch the control

@@ -24,14 +24,14 @@ updatePolicy <- function(x, par) {
     "amber" = 0.3,
     "red" = 0.6
   )
-  #traffic signal policy
-  ligth = ''
+  # traffic signal policy
+  ligth <- ""
   if (xC <= 0.5) {
-    ligth <- 'green'
+    ligth <- "green"
   } else if (xC > 0.5 && xC <= 0.7) {
-    ligth <- 'amber'
+    ligth <- "amber"
   } else if (xC > 0.7) {
-    ligth <- 'red'
+    ligth <- "red"
   }
   u_k <- k * (1.0 - as.numeric(capacity[ligth]))
   u_beta <- beta * (1.0 - as.numeric(movility_restriction[ligth]))
