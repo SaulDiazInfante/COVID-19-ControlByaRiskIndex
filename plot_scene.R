@@ -384,13 +384,11 @@ plot_scene_03 <-
           y = ~Prevalence,
           type = "scatter",
           legendgroup = ~policy,
-          name="Prevalence",
           color=~policy,
           mode = "lines",
           fill = 'tozeroy',
           showlegend = TRUE,
-          colors =  brewer.pal(4, color_palette),
-          reversescale = T
+          colors =  brewer.pal(4, color_palette)
         )
     fig_02 <- 
       df%>%
@@ -404,8 +402,7 @@ plot_scene_03 <-
         mode = "lines",
         fill = 'tozeroy',
         showlegend = F,
-        colors =  brewer.pal(4, color_palette),
-        reversescale = T 
+        colors =  brewer.pal(4, color_palette)
       )#
     fig_03 <- get_time_multi_policy_plot()
     fig <-
