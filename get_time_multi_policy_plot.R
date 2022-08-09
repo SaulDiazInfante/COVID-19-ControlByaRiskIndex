@@ -58,7 +58,7 @@ get_time_multi_policy_plot <-
         col.color = "color",
         optimize_y = TRUE,
         show_labels = TRUE,
-        background_lines = 17,
+        #background_lines = 17,
         linewidth = 25
       )
     pp <- plotly::plotly_build(p)
@@ -67,6 +67,26 @@ get_time_multi_policy_plot <-
         pp$x$data[[i]]$textfont$size <- 6
       }
     }
+    pp <- pp %>% 
+        layout(
+          xaxis = list(
+            showticklabels=T,
+            zerolinecolor = 'ffff',
+            linecolor='white',
+            showline= FALSE,
+            mirror = FALSE,
+            ticktext=list("Start", "End"),
+            tickvals=list("2020-01-01", "2022-12-28")
+          ),
+          yaxis = list(
+            showticklabels=T,
+            fixedrange=TRUE,
+            tickfont=list(size=14, color="black"),
+            showgrid=FALSE,
+            showline= F,
+            mirror = F
+          )
+        )
     return(pp)
   }
 # timeline_fig <- get_time_policy_plot()
