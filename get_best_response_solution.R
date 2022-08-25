@@ -42,14 +42,16 @@ get_best_response_solution <-
       get_contrafactual_solution(
         par,
         initialConditions = initialConditions,
-        time_line = timeLine
+        time_line = timeLine,
+        outputh_path = data_path
       )
     controlledSol <-
       get_controlled_solution(
         par,
         initialConditions,
         time_line = timeLine,
-        decision_period_lenght = 2
+        decision_period_lenght = 2,
+        outputh_path = data_path
       )
     time_line_events <- 
       get_timeline_policy_transitions(
