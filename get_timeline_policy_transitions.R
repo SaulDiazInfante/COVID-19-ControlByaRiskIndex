@@ -8,7 +8,9 @@ library(tidyquant)
 
 get_timeline_policy_transitions <-
   function(policy_file_name = "light_traffic_policy.csv",
-           solution_file = "controlled_solution.csv") {
+           solution_file = "controlled_solution.csv",
+           output_path="./simulated_data",
+           suffix="") {
     #
     policy <- read_csv(policy_file_name)
     controlledSol <- read_csv(solution_file)
@@ -60,8 +62,21 @@ get_timeline_policy_transitions <-
             )
           )
       )
-    write.csv(timeline_events, "light_traffic_policy_transitions.csv",
+    transitions_file_name_ = "/light_traffic_policy_transitions"
+    path = paste(
+      outputh_path,
+      transitions_file_name_,
+      sufix,
+      ".csv",
+      sep=''
+    )
+    write.csv(
+      timeline_events,
+      path, ".csv",
       row.names = FALSE
     )
-    return(timeline_events)
+    res <- list()
+    res$timeline_events <- timeline_events
+    res$timeline_events_path <- path
+    return(res)
   }

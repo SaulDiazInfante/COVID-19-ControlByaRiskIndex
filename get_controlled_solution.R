@@ -24,7 +24,9 @@ get_controlled_solution <-
            init,
            rhs = evaluateRhsODE,
            time_line = seq(0, 156, 1),
-           decision_period_lenght = 1) {
+           decision_period_lenght = 1,
+           outputh_path='./simulated_data',
+           sufix="") {
     n_classes <- (length(time_line) - 1) / decision_period_lenght
     grid <- classIntervals(time_line, n_classes)
     intervalIndex <- 1
@@ -139,7 +141,6 @@ get_controlled_solution <-
       )
     controlledSolution_df["date"] <- controlled_state_time_line_date_in_days
     #
-    # TODO: update this function to move length period
     policy_time_line_idx <- policy_df["date_policy_idx"]
     policy_time_line_date_in_periods <-
       get_time_stamp_policy(
@@ -148,13 +149,38 @@ get_controlled_solution <-
         decision_period_lenght
       )
     policy_df["dates"] <- policy_time_line_date_in_periods
-    write.csv(policy_df, "light_traffic_policy.csv", row.names = FALSE)
-    write.csv(controlledSolution_df,
-      "controlled_solution.csv",
+    
+    policy_file_name_ = "/light_traffic_policy"
+    controlled_path_file_name_ = "/controlled_solution"
+    path_policy = paste(
+      outputh_path,
+      policy_file_name_,
+      sufix,
+      ".csv",
+      sep=''
+    )
+    path_trajectory = paste(
+      outputh_path,
+      controlled_path_file_name_,
+      sufix,
+      ".csv",
+      sep=''
+    )
+    write.csv(
+      policy_df,
+      path_policy,
+      row.names = FALSE
+    )
+    
+    write.csv(
+      controlledSolution_df,
+      path_trajectory,
       row.names = FALSE
     )
     res <- list()
     res$controlled_solution <- controlledSolution_df
     res$policy <- policy_df
+    res$policy_path <- path_policy
+    res$trajectory_path <- path_trajectory
     return(res)
   }

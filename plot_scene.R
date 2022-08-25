@@ -8,6 +8,7 @@ library(classInt)
 library("styler")
 library(lubridate)
 library(httpgd)
+library(RColorBrewer)
 source("get_time_policy_plot.R")
 source("get_time_multi_policy_plot.R")
 
@@ -409,7 +410,7 @@ plot_scene_03 <-
       subplot(
         fig_01, fig_02, fig_03,
         nrows = 3,
-        heights = c(0.35, .35, .30),
+        heights = c(0.40, .40, .20),
         shareX = TRUE,
         titleY = TRUE
       )

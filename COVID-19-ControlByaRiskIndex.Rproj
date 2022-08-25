@@ -13,8 +13,6 @@ RnwWeave: Sweave
 LaTeX: pdfLaTeX
 
 BuildType: Website
-WebsitePath: rMarkdownSources
+WebsitePath: ~/Insync/sauld@cimat.mx/Google Drive/UNISON/Articles/NovelCovid-19/PrevalenceControlledByRisk/tex_sources
 
-MarkdownWrap: Column
-MarkdownWrapAtColumn: 80
 MarkdownReferences: Document
