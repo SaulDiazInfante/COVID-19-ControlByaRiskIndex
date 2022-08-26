@@ -66,13 +66,13 @@ get_timeline_policy_transitions <-
     path = paste(
       outputh_path,
       transitions_file_name_,
-      sufix,
+      suffix,
       ".csv",
       sep=''
     )
     write.csv(
       timeline_events,
-      path, ".csv",
+      path,
       row.names = FALSE
     )
     res <- list()

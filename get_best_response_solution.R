@@ -26,7 +26,7 @@ get_best_response_solution <-
   function(
     parameter_file = "scene01.json",
     data_path="./simulated_data",
-    sufix='controlled_path'
+    suffix='controlled_path'
   ){
     #
     # default parameters in modelParameters.json
@@ -56,6 +56,20 @@ get_best_response_solution <-
     time_line_events <- 
       get_timeline_policy_transitions(
         policy_file_name = controlledSol$policy_path,
-        solution_file = controlledSol$trajectory_path
+        solution_file = controlledSol$trajectory_path,
+        output_path = data_path
       )
+    res <- list()
+    res$counterfactual <- refeSol$refSol
+    res$controlledSol <- controlledSol$controlled_solution
+    res$timeLineEvents <- time_line_events$timeline_events
+    res$data_path <- 
+      list(
+        refeSol$conterfactual_path,
+        controlledSol$trajectory_path,
+        controlledSol$policy_path,
+        time_line_events$timeline_events_path
+        )
+    return(res)
   }
+# TODO: Fix return object of this function
