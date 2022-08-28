@@ -21,7 +21,7 @@ get_contrafactual_solution <-
            rhs = evaluateRhsODE,
            time_line = seq(0, 156, 1),
            outputh_path='./simulated_data',
-           sufix=""
+           suffix=""
   ) {
     time_line_per_day <- seq(0, 7 * (length(time_line) - 1))
     ref_par <- par
@@ -45,7 +45,7 @@ get_contrafactual_solution <-
     refSol["date"] <- refSolution_state_time_line_date_in_days
     refSol["R_t"] <- compute_Rt(refSol, ref_par)
     refSol_df <- data.frame(refSol)
-    path = paste(outputh_path,"/reference_solution", sufix, ".csv", sep='')
+    path = paste(outputh_path,"/reference_solution", suffix, ".csv", sep='')
     write.csv(refSol_df, path, row.names = FALSE)
     res <- list()
     res$refSol <-refSol_df

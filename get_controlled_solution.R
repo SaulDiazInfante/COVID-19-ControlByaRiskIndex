@@ -26,7 +26,7 @@ get_controlled_solution <-
            time_line = seq(0, 156, 1),
            decision_period_lenght = 1,
            outputh_path='./simulated_data',
-           sufix="") {
+           suffix="") {
     n_classes <- (length(time_line) - 1) / decision_period_lenght
     grid <- classIntervals(time_line, n_classes)
     intervalIndex <- 1
@@ -155,14 +155,14 @@ get_controlled_solution <-
     path_policy = paste(
       outputh_path,
       policy_file_name_,
-      sufix,
+      suffix,
       ".csv",
       sep=''
     )
     path_trajectory = paste(
       outputh_path,
       controlled_path_file_name_,
-      sufix,
+      suffix,
       ".csv",
       sep=''
     )

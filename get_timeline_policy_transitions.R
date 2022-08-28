@@ -64,7 +64,7 @@ get_timeline_policy_transitions <-
       )
     transitions_file_name_ = "/light_traffic_policy_transitions"
     path = paste(
-      outputh_path,
+      output_path,
       transitions_file_name_,
       suffix,
       ".csv",
