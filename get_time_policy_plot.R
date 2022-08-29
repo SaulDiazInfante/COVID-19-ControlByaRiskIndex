@@ -10,7 +10,7 @@ get_time_policy_plot <-
   function(file_events = "light_traffic_policy_transitions.csv") {
     # trs <- get_timeline_policy_transitions()
     #
-    trs <- read_csv(file_events)
+    trs <- read_csv(file_events, show_col_types = FALSE)
     color_span <- difftime(
       lubridate::ymd(trs$end),
       lubridate::ymd(trs$start)

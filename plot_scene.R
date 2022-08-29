@@ -11,18 +11,19 @@ library(httpgd)
 library(RColorBrewer)
 source("get_time_policy_plot.R")
 source("get_time_multi_policy_plot.R")
-
 #
-
 plot_scene_01 <-
   function(policy_file_name = "light_traffic_policy.csv",
            controlled_sol_file_name = "controlled_solution.csv",
            contrafactual_sol_file_name = "reference_solution.csv",
            fig_file_name = "figure_01.html") {
     #
-    policy <- read_csv(policy_file_name)
-    controlledSolution <- read_csv(controlled_sol_file_name)
-    df <- read_csv(contrafactual_sol_file_name)
+    policy <- 
+      read_csv(policy_file_name, show_col_types = FALSE)
+    controlledSolution <- 
+      read_csv(controlled_sol_file_name, show_col_types = FALSE)
+    df <- 
+      read_csv(contrafactual_sol_file_name, show_col_types = FALSE)
     colNames <- names(df)[-1] ## assuming date is the first column
     colNames <- colNames[-8]
     colors_counterfact <- setNames(
@@ -195,16 +196,21 @@ plot_scene_01 <-
     save_image(fig, "figure_01.png", width = 1417, height = 875.7726)
     return(fig)
   }
-
+#
+#
+#
 plot_scene_02 <-
   function(policy_file_name = "light_traffic_policy.csv",
            controlled_sol_file_name = "controlled_solution.csv",
            contrafactual_sol_file_name = "reference_solution.csv",
            fig_file_name = "figure.html") {
     #
-    policy <- read_csv(policy_file_name)
-    controlledSolution <- read_csv(controlled_sol_file_name)
-    refSol <- read_csv(contrafactual_sol_file_name)
+    policy <- 
+      read_csv(policy_file_name, show_col_types = FALSE)
+    controlledSolution <- 
+      read_csv(controlled_sol_file_name, show_col_types = FALSE)
+    refSol <- 
+      read_csv(contrafactual_sol_file_name, show_col_types = FALSE)
     colNames <- names(refSol)[-1] ## assuming date is the first column
     colNames <- colNames[-8]
     colors_counterfact <- setNames(
@@ -330,7 +336,6 @@ plot_scene_02 <-
         legend = list(orientation = 'h')
       )
     htmlwidgets::saveWidget(as_widget(fig), "figure02.html")
-    
     if (!require("processx")) {
       install.packages("processx")
     }
@@ -338,25 +343,32 @@ plot_scene_02 <-
     save_image(fig, "figure_02.png", width = 1417, height = 875.7726)
     return(fig)
 }
-
+#
 plot_scene_03 <-
   function( 
-    data_folder = 'simulated_data',
+    data_folder = '',
     contrafactual_sol_file_name = "reference_solution.csv",
-    fig_file_name = "figure_03.html"
-  ){
-  #
-    controlled_sol_file_name_list <- list(
+    fig_file_name = "figure_03.html",
+    file_solutions_list = list(
       "controlled_solution_a_beta_3.csv",
       "controlled_solution_a_beta_2.csv",
       "controlled_solution_a_beta_1.csv"
+    ), 
+    file_events_list = list(
+      "light_traffic_policy_transitions_a_beta_1.csv",
+      "light_traffic_policy_transitions_a_beta_2.csv",
+      "light_traffic_policy_transitions_a_beta_3.csv"
     )
-    df <- read_csv(contrafactual_sol_file_name)
+  ){
+  #
+    controlled_sol_file_name_list <- file_solutions_list
+    df <- 
+      read_csv(contrafactual_sol_file_name, show_col_types = FALSE)
     df$policy <-"Counterfactual"
     counter <- 1
     for (file in controlled_sol_file_name_list){
-      path <- paste(data_folder, file, sep="/")
-      df_aux <- read_csv(path)
+      path <- paste(data_folder, file, sep="")
+      df_aux <- read_csv(path, show_col_types = FALSE)
       df_aux$policy <- paste("Policy", counter) 
       df <- bind_rows(df, df_aux)
       counter <- counter + 1
@@ -375,7 +387,6 @@ plot_scene_03 <-
       "policy")
     
     names(df) <- cnames
-    # color_palette <- c('#fef0d9','#fdcc8a','#fc8d59','#d7301f')
     color_palette <- "RdYlBu"
     fig_01 <- 
       df%>%
@@ -405,7 +416,8 @@ plot_scene_03 <-
         showlegend = F,
         colors =  brewer.pal(4, color_palette)
       )#
-    fig_03 <- get_time_multi_policy_plot()
+    fig_03 <- 
+      get_time_multi_policy_plot(file_events=file_events_list)
     fig <-
       subplot(
         fig_01, fig_02, fig_03,
@@ -421,17 +433,18 @@ plot_scene_03 <-
         over prevalence and cost",
         legend = list(orientation = 'h')
       )
-    htmlwidgets::saveWidget(as_widget(fig), "figure03.html")
-    
+    htmlwidgets::saveWidget(
+      as_widget(fig),
+      paste(fig_file_name,".html", sep='')
+    )
     if (!require("processx")) {
       install.packages("processx")
     }
-    # orca(fig, "figure_01.png")
-    save_image(fig, "figure_03.png", width = 1417, height = 875.7726)
+    save_image(
+      fig,
+      paste(fig_file_name, ".png", sep=''),
+      width = 1417,
+      height = 875.7726
+    )
     return(fig)
 }
-  
-#ig_01 <- plot_scene_01()
-#ig_02 <- plot_scene_02()
-fig_3 <- plot_scene_03()
-fig_3

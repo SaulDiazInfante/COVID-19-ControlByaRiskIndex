@@ -12,8 +12,8 @@ get_timeline_policy_transitions <-
            output_path="./simulated_data",
            suffix="") {
     #
-    policy <- read_csv(policy_file_name)
-    controlledSol <- read_csv(solution_file)
+    policy <- read_csv(policy_file_name, show_col_types = FALSE)
+    controlledSol <- read_csv(solution_file, show_col_types = FALSE)
     solution_time_line <- controlledSol["date"]
     solution_last_time <- solution_time_line$date[nrow(solution_time_line)]
     first_record <- policy[1, ]

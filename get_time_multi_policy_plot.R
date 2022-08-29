@@ -7,16 +7,18 @@ library(plotly)
 source("get_timeline_policy_transitions.R")
 
 get_time_multi_policy_plot <-
-  function() {
-    data_folder <- 'simulated_data'
+  function(
+    data_folder = '',
     file_events = list(
       "light_traffic_policy_transitions_a_beta_1.csv",
       "light_traffic_policy_transitions_a_beta_2.csv",
       "light_traffic_policy_transitions_a_beta_3.csv"
     )
+  ){
+    
     count <- 1
-    path <- paste(data_folder, file_events[1], sep='/')
-    df_aux <- read_csv(path)
+    path <- paste(data_folder, file_events[1], sep='')
+    df_aux <- read_csv(path, show_col_types = FALSE)
     color_span <- difftime(
       lubridate::ymd(df_aux$end),
       lubridate::ymd(df_aux$start)
@@ -25,8 +27,8 @@ get_time_multi_policy_plot <-
     df_aux$group <- paste("Policy", count)
     #
     for (file in file_events[2: length(file_events)]) {
-      path <- paste(data_folder, file, sep='/')
-      trs <- read_csv(path)
+      path <- paste(data_folder, file, sep='')
+      trs <- read_csv(path, show_col_types = FALSE)
       color_span <- difftime(
         lubridate::ymd(trs$end),
         lubridate::ymd(trs$start)
