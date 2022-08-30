@@ -46,9 +46,10 @@ for (g_a_ii in gradient_a_I){
     append(grad_a_I_policy_transitions_path, g_a_ii_path[4])
 }
 #
-plot_scene_03(
+plot_gradient_scene(
   contrafactual_sol_file_name = "reference_solution.csv",
   fig_file_name = "figure_04",
   file_solutions_list = grad_a_I_controlled_sol_path,
-  file_events_list = grad_a_I_policy_transitions_path
+  file_events_list = grad_a_I_policy_transitions_path, 
+  color_palette = 'Purples'
 )
