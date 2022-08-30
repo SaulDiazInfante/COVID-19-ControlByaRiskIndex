@@ -568,3 +568,123 @@ plot_gradient_scene <-
     )
     return(fig)
   }
+###
+plot_scene_3d <-
+  function( 
+    data_folder = '',
+    contrafactual_sol_file_name = "reference_solution.csv",
+    fig_file_name = "figure_03",
+    file_solutions_list = list(
+      "controlled_solution_a_beta_3.csv",
+      "controlled_solution_a_beta_2.csv",
+      "controlled_solution_a_beta_1.csv"
+    ), 
+    file_events_list = list(
+      "light_traffic_policy_transitions_a_beta_1.csv",
+      "light_traffic_policy_transitions_a_beta_2.csv",
+      "light_traffic_policy_transitions_a_beta_3.csv"
+    ),
+    title = "The influence of the expenses due to prevalence on cost",
+    color_palette = 'RdYlGn'
+  ){
+    #
+    controlled_sol_file_name_list <- file_solutions_list
+    df <- 
+      read_csv(contrafactual_sol_file_name, show_col_types = FALSE)
+    df$policy <-"Counterfactual"
+    counter <- 1
+    for (file in controlled_sol_file_name_list){
+      path <- paste(data_folder, file, sep="")
+      df_aux <- read_csv(path, show_col_types = FALSE)
+      df_aux$policy <- paste("Policy", counter) 
+      df <- bind_rows(df, df_aux)
+      counter <- counter + 1
+    }
+    cnames<- c(
+      "time",
+      "xS",
+      "Prevalence",
+      "xV",
+      "xR",
+      "xC",
+      "xF",
+      "Cost",
+      "date",
+      "R_t",
+      "policy")
+    
+    names(df) <- cnames
+    color_period <- length(file_solutions_list) + 1
+    color_palette <- rev(brewer.pal(color_period, "Spectral"))
+    fig_01 <- 
+      df%>%
+      group_by(policy) %>%
+      plot_ly(
+        x = ~xC,
+        y = ~date,
+        z = ~R_t,
+        type = "scatter3d",
+        legendgroup = ~policy,
+        color=~policy,
+        mode = "lines",
+        #fill = 'tozeroy',
+        line = list(width = 6, color=color_palette, reverscale=FALSE),
+        marker = list(symbol = 'circle', size = 2),
+        showlegend = TRUE
+        #colors = color_palette
+      )
+    fig_02 <- 
+      df %>%
+      subset((policy != 'Counterfactual')) %>%
+      rev() %>%
+      group_by(policy) %>%
+      plot_ly(
+        x = ~date,
+        y = ~Cost,
+        type = "scatter",
+        legendgroup = ~policy,
+        color = ~policy,
+        mode = "lines",
+        fill='tozeroy',
+        showlegend = F,
+        colors = color_palette[2:length(color_palette)]
+      )
+    
+    #
+    fig_03 <- 
+      get_time_multi_policy_plot(file_events = file_events_list)
+    fig <-
+      subplot(
+        fig_01, fig_02, fig_03,
+        nrows = 3,
+        heights = c(0.40, .40, .20),
+        shareX = TRUE,
+        titleY = TRUE
+      )
+    fig <-
+      fig %>%
+      layout(
+        title = title,
+        legend = list(orientation = 'h'), 
+        yaxis = list(
+          range = list(0.0, 1.05 * max(df[["Prevalence"]]))
+        ),
+        yaxis2 = list(
+          range = list(0.0,  max(df[["Cost"]]))
+        )
+      )
+    htmlwidgets::saveWidget(
+      as_widget(fig),
+      paste(fig_file_name,".html", sep='')
+    )
+    if (!require("processx")) {
+      install.packages("processx")
+    }
+    save_image(
+      fig,
+      paste(fig_file_name, ".png", sep=''),
+      width = 1417,
+      height = 875.7726
+    )
+    return(fig)
+  }
