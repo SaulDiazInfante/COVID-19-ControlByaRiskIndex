@@ -497,7 +497,7 @@ plot_gradient_scene <-
       "policy")
     
     names(df) <- cnames
-    color_palette
+    color_palette <- rev(brewer.pal(color_period, color_palette))
     color_period <- length(file_solutions_list) + 1
     fig_01 <- 
       df%>%
@@ -511,11 +511,12 @@ plot_gradient_scene <-
         mode = "lines",
         fill = 'tozeroy',
         showlegend = TRUE,
-        colors = rev(brewer.pal(color_period, color_palette))
+        colors = color_palette
       )
     fig_02 <- 
       df %>%
       subset((policy != 'Counterfactual')) %>%
+      rev() %>%
       group_by(policy) %>%
       plot_ly(
         x = ~date,
@@ -524,9 +525,9 @@ plot_gradient_scene <-
         legendgroup = ~policy,
         color = ~policy,
         mode = "lines",
-        fill='tonexty',
+        fill='tozeroy',
         showlegend = F,
-        colors =rev(brewer.pal(color_period, color_palette)[2: color_period])
+        colors = color_palette[2:length(color_palette)]
       )
     
     #

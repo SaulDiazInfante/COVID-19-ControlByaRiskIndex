@@ -51,5 +51,6 @@ plot_gradient_scene(
   fig_file_name = "figure_04",
   file_solutions_list = grad_a_I_controlled_sol_path,
   file_events_list = grad_a_I_policy_transitions_path, 
-  color_palette = 'Purples'
+  # color_palette = 'PuBu'
+  color_palette = 'Accent'
 )
