@@ -494,8 +494,8 @@ plot_gradient_scene <-
       "Cost",
       "date",
       "R_t",
-      "policy")
-    
+      "policy"
+    )
     names(df) <- cnames
     color_period <- length(file_solutions_list) + 1
     color_palette <- rev(brewer.pal(color_period, color_palette))
@@ -511,69 +511,84 @@ plot_gradient_scene <-
         mode = "lines",
         fill = 'tozeroy',
         showlegend = TRUE,
-        colors = color_palette
+        colors = color_palette,
+        xaxis='x1',
+        yaxis='y1'
       )
     fig_02 <- plot_ly()
-    fig_02_ <- 
-      df %>%
+    # Obtaining data
+    df_fig_2 <- df %>%
       subset((policy != 'Counterfactual')) %>%
       rev() %>%
-      group_by(policy) %>%
-      plot_ly(
-        x = ~date,
-        y = ~Cost,
-        type = "scatter",
-        legendgroup = ~policy,
-        color = ~policy,
-        mode = "lines",
-        fill='tozeroy',
-        showlegend = F,
-        colors = color_palette[2:length(color_palette)]
-      )
-    #
-    fig_02_a <-
+      group_by(policy)
+    df_fig_2_a <- 
       df %>%
       filter(
         policy == 'Policy 1' | policy == 'Policy 2'| policy == 'Policy 3'
       ) %>%
-      group_by(policy) %>%
-      plot_ly(
-        x = ~date,
-        y = ~Cost,
+      group_by(policy)
+    #
+    # Drawing
+    fig_02 <- 
+      add_trace(
+        fig_02,
+        x = ~df_fig_2[["date"]],
+        y = ~df_fig_2[["Cost"]],
         type = "scatter",
-        legendgroup = ~policy,
-        color = ~policy,
+        legendgroup = ~df_fig_2[["policy"]],
+        color = ~df_fig_2[["policy"]],
         mode = "lines",
-        fill='tonexty',
+        fill='tozeroy',
         showlegend = F,
-        colors = color_palette[2:length(color_palette)],
         xaxis = 'x2',
-        yaxis = 'y2'
+        yaxis = 'y2',
+        colors = color_palette[2:length(color_palette)]
+    )
+    fig_02 <- 
+      add_trace(
+        fig_02,
+        x = ~df_fig_2_a[["date"]],
+        y = ~df_fig_2_a[["Cost"]],
+        type = "scatter",
+        legendgroup = ~df_fig_2_a[["policy"]],
+        color = ~df_fig_2_a[["policy"]],
+        mode = "lines",
+        fill='tozeroy',
+        showlegend = F,
+        xaxis = 'x3',
+        yaxis = 'y3',
+        colors = color_palette[2:length(color_palette)]
       )
-    fig_02 <- add_trace(fig_02_)
-    fig_02 <- add_trace(fig_02, fig_02_a)
+    #
+    # Drawing inset figure
     fig_02 <- layout(
       fig_02,
-      yaxis = list(
-        range = list(0.0,  max(df[["Cost"]]))
-      ),
       xaxis2 = list(
-        domain = c(0.6 , 0.95),
+        domain = c(0.0, 0.95),
         anchor = 'y2'
       ),
       yaxis2 = list(
-        domain = c(0.6, 0.95),
-        #range = list(0, 350),
+        domain = c(0.0, 0.95),
         anchor = 'x2'
-      )                 
+      ),
+      xaxis3 = list(
+        domain = c(0.1, 0.4),
+        range = c("2022-06-01", "2022-12-31"),
+        anchor = 'y3'
+      ),
+      yaxis3 = list(
+        domain = c(0.7, 0.95),
+        range = list(0, 350),
+        anchor = 'x3'
+      )
     )    
     fig_03 <- 
       get_time_multi_policy_plot(file_events = file_events_list)
     fig <-
       subplot(
-        fig_01, fig_02,fig_02_a, fig_03,
-        nrows = 4,
-        heights = c(0.40, .40, 0,.20),
+        fig_01, fig_02, fig_03,
+        nrows = 3,
+        heights = c(0.40, 0.40, 0.20),
         shareX = TRUE,
         titleY = TRUE
       )
@@ -587,12 +602,6 @@ plot_gradient_scene <-
         ),
         yaxis2 = list(
           range = list(0.0,  max(df[["Cost"]]))
-        ),
-        xaxis3 = list(domain = c(0.0, 0.45), anchor='y3'),
-        yaxis3 = list(
-          range = list(0.0, 300),
-          domain = c(0.2, 0.65), 
-          anchor='x3'
         )
       )
     htmlwidgets::saveWidget(
